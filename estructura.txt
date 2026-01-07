@@ -1,0 +1,18 @@
+src/
+ ├─ components/
+ │   ├─ About.astro
+ │   ├─ Card.astro
+ │   ├─ Contact.astro
+ │   └─ Footer.astro
+ │   └─ Header.astro
+ │   └─ Items.astro
+ │   └─ Projects.astro
+ │   └─ Skill.astro
+ ├─ layouts/
+ │   └─ Layout.astro
+ ├─ pages/
+ │   └─ index.astro
+ ├─ styles/
+ │   └─ global.css
+public/
+ └─ images/

@@ -1,0 +1,59 @@
+---
+import DevIcon from "@/components/icons/DevIcon.astro"
+---
+
+<header class="w-full px-6 py-2 bg-amber-200">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center justify-center w-10 h-10">
+            <DevIcon class="w-6 h-6 transition-transform duration-300 hover:scale-110 hover:rotate-6" />
+        </div>
+
+        <!--Menu Desktop -->
+        <ul class="hidden md:flex gap-8 font-medium">
+            <li><a href="#sobre-mi" class="hover:text-red-500 transition-colors">Inicio</a></li>
+            <li><a href="#proyecto" class="hover:text-red-500 transition-colors">Proyectos</a></li>
+            <li><a href="#skills" class="hover:text-red-500 transition-colors">Tecnologías</a></li>
+        </ul>
+
+        <button id="menuBtn" class="md:hidden text-3xl">
+            <span class="iconify" data-icon="mdi:menu"></span>
+        </button>
+
+        <!--Menu Mobile -->
+        <div
+            id="mobileMenu"
+            class="fixed inset-0 bg-black/90 flex flex-col items-center justify-center gap-10
+                text-white text-2xl transform translate-y-full transition-all duration-300 md:hidden"
+        >
+            <button id='close' class='absolute top-6 right-6 text-3xl text-red-600'>
+                <span class='iconify' data-icon="mdi:close"></span>
+            </button>
+            
+            <a href="#sobre-mi" class="hover:text-amber-300">Inicio</a>
+            <a href="#proyecto" class="hover:text-amber-300">Proyectos</a>
+            <a href="#skills" class="hover:text-amber-300">Tecnologías</a>
+        </div>
+    </nav>
+</header>
+
+<script>
+    const menu = document.getElementById('mobileMenu');
+    const open = document.getElementById('menuBtn');
+    const close = document.getElementById('close');
+
+    open.addEventListener('click', () => {
+        menu.classList.remove('translate-y-full');
+        menu.classList.add('translate-y-0');
+    });
+
+    close.addEventListener('click', () => {
+        menu.classList.remove('translate-y-0');
+        menu.classList.add('translate-y-full');
+    });
+
+    menu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            menu.classList.replace('translate-y-0', 'translate-y-full');
+        });
+    });
+</script>

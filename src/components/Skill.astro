@@ -1,0 +1,101 @@
+---
+import Items from '@/components/Items.astro';
+import ReactIcon from '@/components/icons/ReactIcon.astro';
+import DjangoIcon from '@/components/icons/DjangoIcon.astro';
+import RestFrIcon from '@/components/icons/RestFrIcon.astro';
+import AstroIcon from '@/components/icons/AstroIcon.astro';
+import BootstrapIcon from '@/components/icons/BootstrapIcon.astro';
+import TailwindIcon from '@/components/icons/TailwindIcon.astro';
+import GitIcon from '@/components/icons/GitIcon.astro';
+import GitHubIcon from '@/components/icons/GitHubIcon.astro';
+import NginxIcon from '@/components/icons/NginxIcon.astro';
+import ApacheIcon from '@/components/icons/ApacheIcon.astro';
+import MongoIcon from '@/components/icons/MongoIcon.astro';
+import PostgreSQLIcon from '@/components/icons/PostgreSQLIcon.astro';
+import MySQLIcon from '@/components/icons/MySQLIcon.astro';
+---
+
+<style>
+  .skills-track {
+      display: flex;
+      width: max-content;
+      animation: scrollSkills 30s linear infinite;
+  }
+
+  .skills-row {
+      display: flex;
+      gap: 2.5rem;
+      padding-right: 2.5rem;
+  }
+
+  @keyframes scrollSkills {
+      from {
+          transform: translateX(0);
+      }
+      to {
+          transform: translateX(-50%);
+      }
+  }
+
+  .skills-track:hover {
+      animation-play-state: paused;
+  }
+</style>
+
+<section id="skills" class="px-6 py-12 overflow-hidden">
+  <div class="max-w-7xl mx-auto space-y-10">
+
+    <h2 class="text-3xl md:text-4xl font-semibold">
+      Tecnologías
+    </h2>
+
+    <div class="relative overflow-hidden">
+      <div class="skills-track">
+
+        <div class="skills-row">
+          <Items label="Astro"><AstroIcon /></Items>
+          <Items label="React"><ReactIcon /></Items>
+          <Items label="React Native"><ReactIcon /></Items>
+          <Items label="Tailwind"><TailwindIcon /></Items>
+          <Items label="Bootstrap"><BootstrapIcon /></Items>
+
+          <Items label="Django"><DjangoIcon /></Items>
+          <Items label="REST"><RestFrIcon /></Items>
+
+          <Items label="Git"><GitIcon /></Items>
+          <Items label="GitHub"><GitHubIcon /></Items>
+          <Items label="Nginx"><NginxIcon /></Items>
+          <Items label="Apache"><ApacheIcon /></Items>
+
+          <Items label="PostgreSQL"><PostgreSQLIcon /></Items>
+          <Items label="MySQL"><MySQLIcon /></Items>
+          <Items label="MongoDB"><MongoIcon /></Items>
+        </div>
+
+        <div class="skills-row">
+          <Items label="Astro"><AstroIcon /></Items>
+          <Items label="React"><ReactIcon /></Items>
+          <Items label="React Native"><ReactIcon /></Items>
+          <Items label="Tailwind"><TailwindIcon /></Items>
+          <Items label="Bootstrap"><BootstrapIcon /></Items>
+
+          <Items label="Django"><DjangoIcon /></Items>
+          <Items label="REST"><RestFrIcon /></Items>
+
+          <Items label="Git"><GitIcon /></Items>
+          <Items label="GitHub"><GitHubIcon /></Items>
+          <Items label="Nginx"><NginxIcon /></Items>
+          <Items label="Apache"><ApacheIcon /></Items>
+
+          <Items label="PostgreSQL"><PostgreSQLIcon /></Items>
+          <Items label="MySQL"><MySQLIcon /></Items>
+          <Items label="MongoDB"><MongoIcon /></Items>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
