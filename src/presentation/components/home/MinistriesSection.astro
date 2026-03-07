@@ -7,20 +7,20 @@ const { ministries } = Astro.props;
 ---
 
 <section id="ministerios" class="mx-auto w-[min(1120px,92vw)]">
-  <div class="mb-4">
-    <h2 class="text-3xl font-bold tracking-tight text-zinc-900">Ministerios activos</h2>
-    <p class="mt-1 text-zinc-600">Conoce las areas donde servimos.</p>
+  <div class="mb-3">
+    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">Ministerios activos</h2>
+    <p class="mt-1 text-sm text-zinc-600 sm:text-base">Conoce las areas donde servimos.</p>
   </div>
 
   <div class="overflow-hidden rounded-2xl">
     <div
       id="ministryTrack"
-      class="carousel-track flex gap-3 transition-transform duration-500 ease-out will-change-transform"
+      class="carousel-track flex gap-3 transition-transform duration-700 ease-out will-change-transform"
       data-carousel
     >
       {
         ministries.map((item) => (
-          <div class="carousel-item shrink-0 basis-[48%] rounded-xl border border-zinc-200 bg-amber-50/60 px-4 py-3 font-medium text-zinc-700 transition-colors duration-300 hover:border-zinc-300 lg:basis-[32%]">
+          <div class="carousel-item shrink-0 basis-[48%] rounded-xl border border-zinc-200 bg-amber-50/60 px-3 py-2.5 text-sm font-medium text-zinc-700 transition-colors duration-500 hover:border-zinc-300 lg:basis-[19%]">
             {item}
           </div>
         ))
@@ -28,5 +28,5 @@ const { ministries } = Astro.props;
     </div>
   </div>
 
-  <div class="mt-4 flex items-center justify-center gap-2" data-carousel-dots-for="ministryTrack"></div>
+  <div class="mt-3 flex items-center justify-center gap-2" data-carousel-dots-for="ministryTrack"></div>
 </section>

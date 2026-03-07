@@ -43,6 +43,11 @@ export interface HomeContent {
     address: string;
     mapUrl: string;
   };
+  radio: {
+    title: string;
+    description: string;
+    embedUrl: string;
+  };
 }
 
 export const homeContent: HomeContent = {
@@ -64,7 +69,6 @@ export const homeContent: HomeContent = {
     },
   },
   navLinks: [
-    { href: "#inicio", label: "Inicio" },
     { href: "#agenda", label: "Agenda" },
     { href: "#galeria", label: "Galeria" },
     { href: "#ministerios", label: "Ministerios" },
@@ -118,37 +122,117 @@ export const homeContent: HomeContent = {
   ],
   gallery: [
     {
-      src: "/assests/jovenes.jpeg",
+      src: "/assests/img2.webp",
       alt: "Congregacion adorando junta",
       caption: "Adoracion congregacional",
     },
     {
-      src: "/assests/jovenes.jpeg",
+      src: "/assests/img1.webp",
       alt: "Grupo de oracion",
       caption: "Tiempo de oracion",
     },
     {
-      src: "/assests/jovenes.jpeg",
+      src: "/assests/img3.webp",
       alt: "Jovenes en reunion",
       caption: "Encuentro juvenil",
     },
     {
-      src: "/assests/jovenes.jpeg",
+      src: "/assests/img4.webp",
       alt: "Familias en la iglesia",
       caption: "Domingo en familia",
     },
     {
-      src: "/assests/jovenes.jpeg",
+      src: "/assests/img1.webp",
+      alt: "Servicio de la iglesia",
+      caption: "Servicio principal",
+    },
+    {
+      src: "/assests/img2.webp",
+      alt: "Congregacion adorando junta",
+      caption: "Adoracion congregacional",
+    },
+    {
+      src: "/assests/img4.webp",
+      alt: "Grupo de oracion",
+      caption: "Tiempo de oracion",
+    },
+    {
+      src: "/assests/img3.webp",
+      alt: "Jovenes en reunion",
+      caption: "Encuentro juvenil",
+    },
+    {
+      src: "/assests/img2.webp",
+      alt: "Familias en la iglesia",
+      caption: "Domingo en familia",
+    },
+    {
+      src: "/assests/img1.webp",
+      alt: "Servicio de la iglesia",
+      caption: "Servicio principal",
+    },
+    {
+      src: "/assests/img3.webp",
+      alt: "Congregacion adorando junta",
+      caption: "Adoracion congregacional",
+    },
+    {
+      src: "/assests/img4.webp",
+      alt: "Grupo de oracion",
+      caption: "Tiempo de oracion",
+    },
+    {
+      src: "/assests/img1.webp",
+      alt: "Jovenes en reunion",
+      caption: "Encuentro juvenil",
+    },
+    {
+      src: "/assests/img2.webp",
+      alt: "Familias en la iglesia",
+      caption: "Domingo en familia",
+    },
+    {
+      src: "/assests/img3.webp",
+      alt: "Servicio de la iglesia",
+      caption: "Servicio principal",
+    },
+    {
+      src: "/assests/img4.webp",
+      alt: "Congregacion adorando junta",
+      caption: "Adoracion congregacional",
+    },
+    {
+      src: "/assests/img1.webp",
+      alt: "Grupo de oracion",
+      caption: "Tiempo de oracion",
+    },
+    {
+      src: "/assests/img2.webp",
+      alt: "Jovenes en reunion",
+      caption: "Encuentro juvenil",
+    },
+    {
+      src: "/assests/img3.webp",
+      alt: "Familias en la iglesia",
+      caption: "Domingo en familia",
+    },
+    {
+      src: "/assests/img4.webp",
       alt: "Servicio de la iglesia",
       caption: "Servicio principal",
     },
   ],
   contact: {
-    title: "Ubicacion de la iglesia",
+    title: "¿Donde estamos ubicados?",
     description:
       "Estamos en Barranquilla. Te esperamos para vivir una experiencia de fe y comunidad.",
     address: "Cra. 9 # 63a - 54, El Bosque, Barranquilla, Atlantico",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=Cra.+9+%23+63a+-+54%2C+El+Bosque%2C+Barranquilla%2C+Atlantico",
+  },
+    radio: {
+    title: "Emisora en vivo",
+    description: "Transmision online de la congregacion.",
+    embedUrl: "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1",
   },
 };

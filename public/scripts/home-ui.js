@@ -3,6 +3,12 @@ const closeBtn = document.getElementById("closeSidebar");
 const sidebar = document.getElementById("sidebarMenu");
 const overlay = document.getElementById("menuOverlay");
 const sidebarLinks = document.querySelectorAll(".sidebar-link");
+const scrollTopBtn = document.getElementById("scrollTopBtn");
+const radioPlayStopBtn = document.getElementById("radioPlayStopBtn");
+const radioStreamFrame = document.getElementById("radioStreamFrame");
+const radioPlayIcon = document.getElementById("radioPlayIcon");
+const radioStopIcon = document.getElementById("radioStopIcon");
+const radioPlayStopLabel = document.getElementById("radioPlayStopLabel");
 
 function openMenu() {
   if (!menuBtn || !sidebar || !overlay) return;
@@ -28,11 +34,96 @@ if (menuBtn) menuBtn.addEventListener("click", openMenu);
 if (closeBtn) closeBtn.addEventListener("click", closeMenu);
 if (overlay) overlay.addEventListener("click", closeMenu);
 sidebarLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+function syncScrollTopButton() {
+  if (!scrollTopBtn) return;
+  const shouldShow = window.scrollY > 320;
+  if (shouldShow) {
+    scrollTopBtn.classList.remove("hidden");
+    scrollTopBtn.classList.add("inline-flex");
+  } else {
+    scrollTopBtn.classList.remove("inline-flex");
+    scrollTopBtn.classList.add("hidden");
+  }
+}
+
+if (scrollTopBtn) {
+  scrollTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
+
+function stopRadio() {
+  if (!radioPlayStopBtn || !radioStreamFrame) return;
+  radioStreamFrame.setAttribute("src", "about:blank");
+  setRadioButtonState(false);
+}
+
+function setRadioButtonState(isPlaying) {
+  if (!radioPlayStopBtn) return;
+  radioPlayStopBtn.dataset.playing = isPlaying ? "true" : "false";
+
+  if (isPlaying) {
+    radioPlayStopBtn.classList.remove(
+      "border-green-200",
+      "bg-green-600",
+      "shadow-green-600/30",
+      "hover:bg-green-700",
+    );
+    radioPlayStopBtn.classList.add(
+      "border-red-200",
+      "bg-red-600",
+      "shadow-red-600/30",
+      "hover:bg-red-700",
+    );
+    radioPlayStopBtn.setAttribute("aria-label", "Detener emisora");
+    if (radioPlayIcon) radioPlayIcon.classList.add("hidden");
+    if (radioStopIcon) radioStopIcon.classList.remove("hidden");
+    if (radioPlayStopLabel) radioPlayStopLabel.textContent = "Stop";
+    return;
+  }
+
+  radioPlayStopBtn.classList.remove(
+    "border-red-200",
+    "bg-red-600",
+    "shadow-red-600/30",
+    "hover:bg-red-700",
+  );
+  radioPlayStopBtn.classList.add(
+    "border-green-200",
+    "bg-green-600",
+    "shadow-green-600/30",
+    "hover:bg-green-700",
+  );
+  radioPlayStopBtn.setAttribute("aria-label", "Reproducir emisora");
+  if (radioStopIcon) radioStopIcon.classList.add("hidden");
+  if (radioPlayIcon) radioPlayIcon.classList.remove("hidden");
+  if (radioPlayStopLabel) radioPlayStopLabel.textContent = "Play";
+}
+
+if (radioPlayStopBtn && radioStreamFrame) {
+  setRadioButtonState(false);
+  radioPlayStopBtn.addEventListener("click", () => {
+    const isPlaying = radioPlayStopBtn.dataset.playing === "true";
+    if (isPlaying) {
+      stopRadio();
+      return;
+    }
+    const streamUrl = radioStreamFrame.dataset.src;
+    if (!streamUrl) return;
+    radioStreamFrame.setAttribute("src", streamUrl);
+    setRadioButtonState(true);
+  });
+}
+
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeMenu();
+  if (event.key === "Escape") {
+    closeMenu();
+    stopRadio();
+  }
 });
 
-function initCarousel(trackId) {
+function initCarousel(trackId, options = { auto: false }) {
   const track = document.getElementById(trackId);
   if (!track) return null;
 
@@ -119,7 +210,7 @@ function initCarousel(trackId) {
       dot.type = "button";
       dot.setAttribute("aria-label", `Ir a pagina ${i + 1}`);
       dot.className =
-        "h-2.5 w-2.5 rounded-full border border-zinc-400/60 bg-zinc-200 transition-all duration-300";
+        "h-2.5 w-2.5 rounded-full border border-zinc-400/60 bg-zinc-200 transition-all duration-500";
       dot.addEventListener("click", () => {
         goTo(i * itemsPerView);
       });
@@ -153,6 +244,7 @@ function initCarousel(trackId) {
   }
 
   function startAuto() {
+    if (!options.auto) return;
     stopAuto();
     if (maxIndex <= 0) return;
     autoTimer = setInterval(() => {
@@ -160,10 +252,12 @@ function initCarousel(trackId) {
     }, 3800);
   }
 
-  viewport.addEventListener("mouseenter", stopAuto);
-  viewport.addEventListener("mouseleave", startAuto);
-  viewport.addEventListener("touchstart", stopAuto, { passive: true });
-  viewport.addEventListener("touchend", startAuto, { passive: true });
+  if (options.auto) {
+    viewport.addEventListener("mouseenter", stopAuto);
+    viewport.addEventListener("mouseleave", startAuto);
+    viewport.addEventListener("touchstart", stopAuto, { passive: true });
+    viewport.addEventListener("touchend", startAuto, { passive: true });
+  }
 
   measure();
   startAuto();
@@ -171,8 +265,12 @@ function initCarousel(trackId) {
 }
 
 const carousels = {};
-["agendaTrack", "faithGallery", "ministryTrack"].forEach((id) => {
-  const instance = initCarousel(id);
+[
+  { id: "agendaTrack", auto: false },
+  { id: "faithGallery", auto: true },
+  { id: "ministryTrack", auto: false },
+].forEach(({ id, auto }) => {
+  const instance = initCarousel(id, { auto });
   if (instance) carousels[id] = instance;
 });
 
@@ -217,7 +315,11 @@ window.addEventListener("resize", () => {
   resizeTimer = setTimeout(() => {
     Object.values(carousels).forEach((carousel) => {
       carousel.measure();
+      carousel.stopAuto();
       carousel.startAuto();
     });
   }, 80);
 });
+
+window.addEventListener("scroll", syncScrollTopButton, { passive: true });
+syncScrollTopButton();

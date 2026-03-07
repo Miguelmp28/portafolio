@@ -21,68 +21,86 @@ function iconFor(label: string) {
 }
 ---
 
-<header class="sticky top-4 z-40 mx-auto mt-4 w-[min(1120px,92vw)]">
-  <div class="flex items-center justify-between gap-4 rounded-full border border-zinc-300/80 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
-    <a href="#inicio" class="text-sm font-extrabold tracking-[0.04em] text-zinc-900 transition-colors duration-300 hover:text-zinc-700 sm:text-base">
-      {brand.main} <span class="text-amber-700">{brand.highlight}</span>
-    </a>
+<header class="fixed inset-x-0 top-0 z-40">
+  <div class="border-b border-zinc-200 bg-white/90 backdrop-blur-md">
+    <div class="mx-auto flex w-[min(1120px,92vw)] items-center justify-between gap-3 px-3 py-1.5 sm:px-4">
+      <img
+        src="/assests/logo.webp"
+        alt={`${brand.main} ${brand.highlight}`}
+        class="h-15 w-10 object-contain saturate-150 contrast-110 sm:h-10"
+      />
 
-    <nav class="hidden flex-wrap gap-4 md:flex" aria-label="Navegacion principal">
+    <nav class="hidden items-center gap-2 md:flex" aria-label="Navegacion principal">
       {
         links.map((link) => (
-          <a href={link.href} class="text-sm text-zinc-600 transition-colors duration-300 hover:text-zinc-900">{link.label}</a>
+          <a
+            href={link.href}
+            class="rounded-full px-3 py-1.5 text-sm font-semibold text-zinc-600 transition-all duration-500 hover:bg-rose-100 hover:text-rose-700"
+          >
+            {link.label}
+          </a>
         ))
       }
     </nav>
 
     <button
       id="menuBtn"
-      class="inline-flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl border border-zinc-300 text-zinc-800 transition-colors duration-300 hover:bg-zinc-100 md:hidden"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white text-zinc-700 shadow-sm transition-all duration-500 hover:bg-rose-100 hover:text-rose-700 md:hidden"
       type="button"
       aria-label="Abrir menu"
       aria-controls="sidebarMenu"
       aria-expanded="false"
     >
-      <span class="h-0.5 w-5 bg-current"></span>
-      <span class="h-0.5 w-5 bg-current"></span>
-      <span class="h-0.5 w-5 bg-current"></span>
+      <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <path d="M4 7h16"></path>
+        <path d="M4 12h16"></path>
+        <path d="M4 17h16"></path>
+      </svg>
     </button>
+    </div>
   </div>
 </header>
 
-<div id="menuOverlay" class="fixed inset-0 z-50 bg-zinc-900/30" hidden></div>
+<div id="menuOverlay" class="fixed inset-0 z-50 bg-zinc-900/45 backdrop-blur-[2px]" hidden></div>
 <aside
   id="sidebarMenu"
-  class="fixed right-0 top-0 z-[55] flex h-screen w-[min(84vw,340px)] translate-x-full flex-col border-l border-zinc-300 bg-white px-4 py-4 shadow-2xl transition-transform duration-200"
+  class="fixed right-0 top-0 z-[55] flex h-screen w-[min(86vw,360px)] translate-x-full flex-col bg-zinc-50 px-4 py-4 shadow-2xl transition-transform duration-500"
   aria-hidden="true"
 >
-  <div class="mb-6 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-    <div class="mb-3 flex items-center justify-between">
-      <p class="text-sm font-bold tracking-wide text-zinc-900">
-        {brand.main} <span class="text-amber-700">{brand.highlight}</span>
-      </p>
+  <div class="mb-5 rounded-2xl border border-zinc-200 bg-gradient-to-br from-rose-50 via-white to-zinc-50 p-4 shadow-sm">
+    <div class="mb-3 flex items-start justify-between gap-3">
+      <div class="rounded-xl border border-zinc-200 bg-white p-1.5 shadow-sm">
+        <img
+          src="/assests/logo.webp"
+          alt={`${brand.main} ${brand.highlight}`}
+          class="h-11 w-auto object-contain saturate-150 contrast-110"
+        />
+      </div>
       <button
         id="closeSidebar"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-300 text-lg text-zinc-900 transition-colors duration-300 hover:bg-zinc-100"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-300 bg-white text-zinc-700 transition-colors duration-500 hover:bg-zinc-100"
         type="button"
         aria-label="Cerrar menu"
       >
-        x
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+          <path d="M6 6l12 12"></path>
+          <path d="M18 6L6 18"></path>
+        </svg>
       </button>
     </div>
-    <p class="text-xs text-zinc-500">Explora la comunidad y los espacios de fe.</p>
+    <p class="text-xs font-medium text-zinc-500">Explora la comunidad y los espacios de fe.</p>
   </div>
 
-  <nav class="flex flex-col gap-2" aria-label="Navegacion movil">
+  <nav class="flex flex-1 flex-col gap-2" aria-label="Navegacion movil">
     {
       links.map((link) => {
         const icon = iconFor(link.label);
         return (
           <a
             href={link.href}
-            class="sidebar-link group flex items-center gap-3 rounded-xl border border-zinc-200 px-3 py-3 text-zinc-700 transition-colors duration-300 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
+            class="sidebar-link group flex items-center gap-3 rounded-xl border border-zinc-200 bg-white px-3 py-3 text-zinc-700 shadow-sm transition-all duration-500 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
           >
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-zinc-200 text-zinc-600 group-hover:bg-amber-50 group-hover:text-amber-700 group-hover:border-amber-200 transition-colors duration-300">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 text-zinc-600 transition-colors duration-500 group-hover:border-rose-200 group-hover:bg-rose-50 group-hover:text-rose-700">
               {icon === "home" && (
                 <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
               )}
@@ -99,10 +117,22 @@ function iconFor(label: string) {
                 <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.68 7-11a7 7 0 1 0-14 0c0 5.32 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
               )}
             </span>
-            <span class="text-sm font-medium">{link.label}</span>
+            <span class="text-sm font-semibold">{link.label}</span>
+            <span class="ml-auto text-zinc-300 transition-colors duration-500 group-hover:text-zinc-500">{">"}</span>
           </a>
         );
       })
     }
   </nav>
 </aside>
+
+<button
+  id="scrollTopBtn"
+  type="button"
+  class="fixed bottom-4 right-28 z-[45] hidden h-10 w-10 items-center justify-center rounded-full bg-zinc-900 text-white shadow-lg transition-all duration-500 hover:bg-rose-600 sm:bottom-5 sm:right-30"
+  aria-label="Subir al inicio"
+>
+  <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m18 15-6-6-6 6"></path>
+  </svg>
+</button>
