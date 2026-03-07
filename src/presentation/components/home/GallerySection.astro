@@ -1,0 +1,35 @@
+---
+import type { GalleryItem } from "@/domain/home/content";
+
+interface Props {
+  gallery: GalleryItem[];
+}
+
+const { gallery } = Astro.props;
+---
+
+<section id="galeria" class="mx-auto w-[min(1120px,92vw)]">
+  <div class="mb-4">
+    <h2 class="text-3xl font-bold tracking-tight text-zinc-900">Galeria de comunidad</h2>
+    <p class="mt-1 text-zinc-600">Momentos de fe, esperanza y vida en comunidad.</p>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl">
+    <div
+      id="faithGallery"
+      class="carousel-track flex gap-3 transition-transform duration-500 ease-out will-change-transform"
+      data-carousel
+    >
+      {
+        gallery.map((image) => (
+          <figure class="carousel-item m-0 shrink-0 basis-[48%] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-colors duration-300 hover:border-zinc-300 lg:basis-[24%]">
+            <img src={image.src} alt={image.alt} loading="lazy" class="h-48 w-full object-cover" />
+            <figcaption class="p-3 text-zinc-600">{image.caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-center gap-2" data-carousel-dots-for="faithGallery"></div>
+</section>

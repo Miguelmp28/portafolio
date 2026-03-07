@@ -1,0 +1,40 @@
+---
+import type { EventItem } from "@/domain/home/content";
+
+interface Props {
+  events: EventItem[];
+}
+
+const { events } = Astro.props;
+---
+
+<section id="agenda" class="mx-auto w-[min(1120px,92vw)]">
+  <div class="mb-4">
+    <h2 class="text-3xl font-bold tracking-tight text-zinc-900">Agenda de la semana</h2>
+    <p class="mt-1 text-zinc-600">Servicios semanales en carrusel.</p>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl">
+    <div
+      id="agendaTrack"
+      class="carousel-track flex gap-3 transition-transform duration-500 ease-out will-change-transform"
+      data-carousel
+    >
+      {
+        events.map((event) => (
+          <article
+            class="agenda-card carousel-item shrink-0 basis-[48%] rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm transition-colors duration-300 hover:border-zinc-300 lg:basis-[32%]"
+            data-service-day={event.day}
+          >
+            <small class="font-semibold text-amber-700">{event.day}</small>
+            <h3 class="mt-1 text-xl font-bold text-zinc-900">{event.title}</h3>
+            <p class="mt-2 text-zinc-600">{event.time}</p>
+            <p class="text-zinc-600">{event.place}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-center gap-2" data-carousel-dots-for="agendaTrack"></div>
+</section>

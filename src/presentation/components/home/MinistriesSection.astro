@@ -1,0 +1,32 @@
+---
+interface Props {
+  ministries: string[];
+}
+
+const { ministries } = Astro.props;
+---
+
+<section id="ministerios" class="mx-auto w-[min(1120px,92vw)]">
+  <div class="mb-4">
+    <h2 class="text-3xl font-bold tracking-tight text-zinc-900">Ministerios activos</h2>
+    <p class="mt-1 text-zinc-600">Conoce las areas donde servimos.</p>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl">
+    <div
+      id="ministryTrack"
+      class="carousel-track flex gap-3 transition-transform duration-500 ease-out will-change-transform"
+      data-carousel
+    >
+      {
+        ministries.map((item) => (
+          <div class="carousel-item shrink-0 basis-[48%] rounded-xl border border-zinc-200 bg-amber-50/60 px-4 py-3 font-medium text-zinc-700 transition-colors duration-300 hover:border-zinc-300 lg:basis-[32%]">
+            {item}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-center gap-2" data-carousel-dots-for="ministryTrack"></div>
+</section>

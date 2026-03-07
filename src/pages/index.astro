@@ -1,12 +1,58 @@
 ---
-import Layouts from '@/layouts/Layouts.astro';
-import About from '@/components/About.astro';
-import Skill from '@/components/Skill.astro';
-import Projects from '@/components/Projects.astro';
+import { getHomePageData } from "@/application/home/getHomePageData";
+import SidebarNav from "@/presentation/components/home/SidebarNav.astro";
+import HeroSection from "@/presentation/components/home/HeroSection.astro";
+import AgendaSection from "@/presentation/components/home/AgendaSection.astro";
+import GallerySection from "@/presentation/components/home/GallerySection.astro";
+import MinistriesSection from "@/presentation/components/home/MinistriesSection.astro";
+import ContactSection from "@/presentation/components/home/ContactSection.astro";
+import SiteFooter from "@/presentation/components/home/SiteFooter.astro";
+import "@/styles/global.css";
+
+const data = getHomePageData();
 ---
 
-<Layouts>
-    <About />
-    <Skill />
-    <Projects />
-</Layouts>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iglesia Cristiana Amor</title>
+    <meta
+      name="description"
+      content="Comunidad de fe para crecer, servir y caminar juntos en Cristo."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="min-h-screen bg-zinc-50 text-zinc-900"
+    style="font-family: 'Outfit', sans-serif;"
+  >
+    <canvas id="bg3d" class="pointer-events-none fixed inset-0 z-0"></canvas>
+    <div
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(to_bottom,rgba(250,250,250,0.12),rgba(244,244,245,0.56)_42%),repeating-linear-gradient(to_right,rgba(120,113,108,0.035)_0_1px,transparent_1px_72px)]"
+    ></div>
+
+    <div class="relative z-[2]">
+      <SidebarNav brand={data.brand} links={data.navLinks} />
+
+      <main class="space-y-12 pb-8">
+        <HeroSection hero={data.hero} />
+        <AgendaSection events={data.events} />
+        <GallerySection gallery={data.gallery} />
+        <MinistriesSection ministries={data.ministries} />
+        <ContactSection contact={data.contact} />
+      </main>
+
+      <SiteFooter />
+    </div>
+
+    <script type="module" src="/scripts/faith-scene.js"></script>
+    <script type="module" src="/scripts/home-ui.js"></script>
+  </body>
+</html>

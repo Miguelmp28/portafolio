@@ -1,0 +1,56 @@
+---
+interface Props {
+  hero: {
+    title: string;
+    description: string;
+    primaryCta: { href: string; label: string };
+    secondaryCta: { href: string; label: string };
+  };
+}
+
+const { hero } = Astro.props;
+---
+
+<section id="inicio" class="mx-auto w-[min(1120px,92vw)] pt-6">
+  <h1 class="max-w-[16ch] text-4xl font-extrabold leading-tight tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">{hero.title}</h1>
+  <p class="mt-4 max-w-3xl text-zinc-600">{hero.description}</p>
+  <div class="mt-6 flex flex-wrap gap-3">
+    <a
+      class="rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-300 hover:bg-zinc-800"
+      href={hero.primaryCta.href}
+    >
+      {hero.primaryCta.label}
+    </a>
+    <a
+      class="rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition-colors duration-300 hover:border-zinc-400 hover:bg-zinc-50"
+      href={hero.secondaryCta.href}
+    >
+      {hero.secondaryCta.label}
+    </a>
+  </div>
+
+  <div class="mt-5 flex flex-wrap items-center gap-2">
+    <span class="text-xs font-semibold uppercase tracking-[0.08em] text-zinc-500">Diseño 3D</span>
+    <button
+      type="button"
+      data-scene-style="cross"
+      class="scene-style-btn rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 transition-colors duration-300 hover:bg-zinc-100"
+    >
+      Cruz Viva
+    </button>
+    <button
+      type="button"
+      data-scene-style="hope"
+      class="scene-style-btn rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 transition-colors duration-300 hover:bg-zinc-100"
+    >
+      Luz de Esperanza
+    </button>
+    <button
+      type="button"
+      data-scene-style="faith"
+      class="scene-style-btn rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 transition-colors duration-300 hover:bg-zinc-100"
+    >
+      Camino de Fe
+    </button>
+  </div>
+</section>
