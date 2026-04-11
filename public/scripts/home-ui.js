@@ -191,11 +191,11 @@ function initCarousel(trackId, options = { auto: false }) {
     const active = activeDotIndex();
     dots.forEach((dot, dotIndex) => {
       if (dotIndex === active) {
-        dot.classList.remove("w-2.5", "bg-zinc-200", "border-zinc-400/60");
-        dot.classList.add("w-8", "bg-zinc-900", "border-zinc-900");
+        dot.classList.remove("w-2.5");
+        dot.classList.add("w-8", "dot-active");
       } else {
-        dot.classList.remove("w-8", "bg-zinc-900", "border-zinc-900");
-        dot.classList.add("w-2.5", "bg-zinc-200", "border-zinc-400/60");
+        dot.classList.remove("w-8", "dot-active");
+        dot.classList.add("w-2.5");
       }
     });
   }
@@ -209,8 +209,7 @@ function initCarousel(trackId, options = { auto: false }) {
       const dot = document.createElement("button");
       dot.type = "button";
       dot.setAttribute("aria-label", `Ir a pagina ${i + 1}`);
-      dot.className =
-        "h-2.5 w-2.5 rounded-full border border-zinc-400/60 bg-zinc-200 transition-all duration-500";
+      dot.className = "carousel-dot h-2.5 w-2.5 rounded-full border transition-all duration-500";
       dot.addEventListener("click", () => {
         goTo(i * itemsPerView);
       });
@@ -222,11 +221,11 @@ function initCarousel(trackId, options = { auto: false }) {
 
   viewport.addEventListener("touchstart", (event) => {
     startX = event.touches[0].clientX;
-  });
+  }, { passive: true });
 
   viewport.addEventListener("touchmove", (event) => {
     endX = event.touches[0].clientX;
-  });
+  }, { passive: true });
 
   viewport.addEventListener("touchend", () => {
     const delta = endX - startX;
@@ -261,7 +260,7 @@ function initCarousel(trackId, options = { auto: false }) {
 
   measure();
   startAuto();
-  return { next, prev, goTo, items, measure, startAuto, stopAuto };
+  return { next, prev, goTo, items, measure, startAuto, stopAuto, syncDots };
 }
 
 const carousels = {};
@@ -301,7 +300,7 @@ const todayName = dayAlias[normalizeDay(bogotaDay)];
 const todayCard = todayName ? document.querySelector(`[data-service-day="${todayName}"]`) : null;
 
 if (todayCard) {
-  todayCard.classList.add("border-amber-600", "bg-amber-50", "shadow-md");
+  todayCard.classList.add("today-highlight");
   const agendaCarousel = carousels.agendaTrack;
   if (agendaCarousel) {
     const dayIndex = agendaCarousel.items.indexOf(todayCard);
@@ -323,3 +322,29 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("scroll", syncScrollTopButton, { passive: true });
 syncScrollTopButton();
+
+// ── Dark mode toggle ────────────────────────────────────────────────────────
+const darkModeBtn = document.getElementById("darkModeBtn");
+const darkModeSunIcon = document.getElementById("darkModeSunIcon");
+const darkModeMoonIcon = document.getElementById("darkModeMoonIcon");
+
+function applyDarkMode(dark) {
+  document.documentElement.classList.toggle("dark", dark);
+  localStorage.setItem("darkMode", dark ? "dark" : "light");
+  if (darkModeSunIcon) darkModeSunIcon.classList.toggle("hidden", !dark);
+  if (darkModeMoonIcon) darkModeMoonIcon.classList.toggle("hidden", dark);
+  Object.values(carousels).forEach((c) => c.syncDots());
+}
+
+// Sync icon to current state on load
+(function syncDarkIcon() {
+  const isDark = document.documentElement.classList.contains("dark");
+  if (darkModeSunIcon) darkModeSunIcon.classList.toggle("hidden", !isDark);
+  if (darkModeMoonIcon) darkModeMoonIcon.classList.toggle("hidden", isDark);
+})();
+
+if (darkModeBtn) {
+  darkModeBtn.addEventListener("click", () => {
+    applyDarkMode(!document.documentElement.classList.contains("dark"));
+  });
+}

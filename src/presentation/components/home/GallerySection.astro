@@ -10,8 +10,8 @@ const { gallery } = Astro.props;
 
 <section id="galeria" class="mx-auto w-[min(1120px,92vw)]">
   <div class="mb-3">
-    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">Galeria de comunidad</h2>
-    <p class="mt-1 text-sm text-zinc-600 sm:text-base">Momentos de fe, esperanza y vida en comunidad.</p>
+    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl">Galeria de comunidad</h2>
+    <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400 sm:text-base">Momentos de fe, esperanza y vida en comunidad.</p>
   </div>
 
   <div class="overflow-hidden rounded-2xl">
@@ -22,9 +22,9 @@ const { gallery } = Astro.props;
     >
       {
         gallery.map((image) => (
-          <figure class="carousel-item m-0 shrink-0 basis-[48%] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-colors duration-500 hover:border-zinc-300 lg:basis-[24%]">
+          <figure class="carousel-item m-0 shrink-0 basis-[48%] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition-colors duration-500 hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600 lg:basis-[24%]">
             <img src={image.src} alt={image.alt} loading="lazy" class="h-40 w-full object-cover" />
-            <figcaption class="p-2.5 text-sm text-zinc-600">{image.caption}</figcaption>
+            <figcaption class="p-2.5 text-sm text-zinc-600 dark:text-zinc-400">{image.caption}</figcaption>
           </figure>
         ))
       }

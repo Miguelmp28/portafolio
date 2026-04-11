@@ -29,21 +29,25 @@ const data = getHomePageData();
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <!-- Apply dark mode before paint to prevent flash -->
+    <script is:inline>
+      (function () {
+        var saved = localStorage.getItem("darkMode");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (saved === "dark" || (!saved && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
   </head>
   <body
-    class="min-h-screen bg-zinc-50 text-zinc-900"
+    class="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100"
     style="font-family: 'Outfit', sans-serif;"
   >
-    <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 grid place-items-center">
-      <img
-        src="/assests/logo.webp"
-        alt=""
-        class="h-[60vh] w-[60vh] max-h-[600px] max-w-[600px] object-contain opacity-[30] saturate-300 contrast-200"
-      />
-    </div>
+    <!-- Fondo animado (canvas insertado por faith-bg.js, z-index 0) -->
     <div
       aria-hidden="true"
-      class="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(to_bottom,rgba(250,250,250,0.12),rgba(244,244,245,0.56)_42%),repeating-linear-gradient(to_right,rgba(120,113,108,0.035)_0_1px,transparent_1px_72px)]"
+      class="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(to_bottom,rgba(250,250,250,0.12),rgba(244,244,245,0.56)_42%),repeating-linear-gradient(to_right,rgba(120,113,108,0.035)_0_1px,transparent_1px_72px)] dark:bg-[linear-gradient(to_bottom,rgba(10,10,10,0.08),rgba(9,9,11,0.52)_42%),repeating-linear-gradient(to_right,rgba(161,161,170,0.028)_0_1px,transparent_1px_72px)]"
     ></div>
 
     <div class="relative z-[2]">
@@ -63,5 +67,6 @@ const data = getHomePageData();
     <RadioFloatPlayer radio={data.radio} />
 
     <script type="module" src="/scripts/home-ui.js"></script>
+    <script defer src="/scripts/faith-bg.js"></script>
   </body>
 </html>
