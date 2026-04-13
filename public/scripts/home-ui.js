@@ -260,7 +260,7 @@ function initCarousel(trackId, options = { auto: false }) {
 
   measure();
   startAuto();
-  return { next, prev, goTo, items, measure, startAuto, stopAuto, syncDots };
+  return { next, prev, goTo, items, measure, startAuto, stopAuto };
 }
 
 const carousels = {};
@@ -322,29 +322,3 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("scroll", syncScrollTopButton, { passive: true });
 syncScrollTopButton();
-
-// ── Dark mode toggle ────────────────────────────────────────────────────────
-const darkModeBtn = document.getElementById("darkModeBtn");
-const darkModeSunIcon = document.getElementById("darkModeSunIcon");
-const darkModeMoonIcon = document.getElementById("darkModeMoonIcon");
-
-function applyDarkMode(dark) {
-  document.documentElement.classList.toggle("dark", dark);
-  localStorage.setItem("darkMode", dark ? "dark" : "light");
-  if (darkModeSunIcon) darkModeSunIcon.classList.toggle("hidden", !dark);
-  if (darkModeMoonIcon) darkModeMoonIcon.classList.toggle("hidden", dark);
-  Object.values(carousels).forEach((c) => c.syncDots());
-}
-
-// Sync icon to current state on load
-(function syncDarkIcon() {
-  const isDark = document.documentElement.classList.contains("dark");
-  if (darkModeSunIcon) darkModeSunIcon.classList.toggle("hidden", !isDark);
-  if (darkModeMoonIcon) darkModeMoonIcon.classList.toggle("hidden", isDark);
-})();
-
-if (darkModeBtn) {
-  darkModeBtn.addEventListener("click", () => {
-    applyDarkMode(!document.documentElement.classList.contains("dark"));
-  });
-}

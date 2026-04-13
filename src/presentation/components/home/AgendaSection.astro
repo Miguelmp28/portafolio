@@ -10,8 +10,8 @@ const { events } = Astro.props;
 
 <section id="agenda" class="mx-auto w-[min(1120px,92vw)]">
   <div class="mb-3">
-    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl">Agenda de la semana</h2>
-    <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400 sm:text-base">Servicios semanales en carrusel.</p>
+    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">Agenda de la semana</h2>
+    <p class="mt-1 text-sm text-zinc-600 sm:text-base">Servicios semanales en carrusel.</p>
   </div>
 
   <div class="overflow-hidden rounded-2xl">
@@ -23,13 +23,13 @@ const { events } = Astro.props;
       {
         events.map((event) => (
           <article
-            class="agenda-card carousel-item shrink-0 basis-[48%] rounded-xl border border-zinc-200 bg-white p-3 shadow-sm transition-colors duration-500 hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600 lg:basis-[32%]"
+            class="agenda-card carousel-item shrink-0 basis-[48%] rounded-xl border border-zinc-200 bg-white p-3 shadow-sm transition-colors duration-500 hover:border-zinc-300 lg:basis-[32%]"
             data-service-day={event.day}
           >
-            <small class="text-xs font-semibold text-amber-700 dark:text-amber-500">{event.day}</small>
-            <h3 class="mt-1 text-lg font-bold text-zinc-900 dark:text-zinc-100">{event.title}</h3>
-            <p class="mt-1.5 text-sm text-zinc-600 dark:text-zinc-400">{event.time}</p>
-            <p class="text-sm text-zinc-600 dark:text-zinc-400">{event.place}</p>
+            <small class="text-xs font-semibold text-amber-700">{event.day}</small>
+            <h3 class="mt-1 text-lg font-bold text-zinc-900">{event.title}</h3>
+            <p class="mt-1.5 text-sm text-zinc-600">{event.time}</p>
+            <p class="text-sm text-zinc-600">{event.place}</p>
           </article>
         ))
       }
