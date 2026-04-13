@@ -13,7 +13,7 @@ export interface EventItem {
 export interface GalleryItem {
   src: string;
   alt: string;
-  caption: string;
+  caption?: string;
 }
 
 export interface HomeContent {
@@ -58,7 +58,7 @@ export const homeContent: HomeContent = {
   hero: {
     title: "Fe viva, esperanza firme y comunidad real para tu familia.",
     description:
-      "Somos una congregacion centrada en Cristo, con espacios para ninos, jovenes y adultos. Aqui encuentras palabra, adoracion y personas que caminan contigo.",
+      "Somos una congregación centrada en Cristo, con espacios para niños, jóvenes y adultos. Aqui encuentras palabra, adoración y personas que caminan contigo.",
     primaryCta: {
       href: "#agenda",
       label: "Ver horarios",
@@ -77,31 +77,31 @@ export const homeContent: HomeContent = {
   events: [
     {
       day: "Martes",
-      title: "Oracion",
+      title: "Oración",
       time: "7:00 PM",
       place: "Iglesia Amor",
     },
     {
-      day: "Miercoles",
-      title: "Estudios Biblicos",
+      day: "Miércoles",
+      title: "Estudios Bíblicos",
       time: "7:00 PM",
       place: "Iglesia Amor",
     },
     {
       day: "Jueves",
-      title: "Noches con Jesus",
+      title: "Noches con Jesús",
       time: "7:00 PM",
       place: "Iglesia Amor",
     },
     {
       day: "Viernes",
-      title: "Estudios Biblicos",
+      title: "Estudios Bíblicos",
       time: "7:00 PM",
       place: "Iglesia Amor",
     },
     {
-      day: "Sabado",
-      title: "Generacion Josue",
+      day: "Sábado",
+      title: "Generación Josué",
       time: "6:30 PM",
       place: "Iglesia Amor",
     },
@@ -113,12 +113,12 @@ export const homeContent: HomeContent = {
     },
   ],
   ministries: [
-    "Ninos y Familia",
-    "Jovenes",
-    "Musica y Adoracion",
-    "Intercesion",
-    "Accion Social",
-    "Discipulado",
+    "Niños y Familia",
+    "Jóvenes",
+    "Música y Adoración",
+    "Intercesión",
+    "Ujieres",
+    "Caballeros",
   ],
   gallery: [
     {
@@ -223,7 +223,7 @@ export const homeContent: HomeContent = {
     },
   ],
   contact: {
-    title: "¿Donde estamos ubicados?",
+    title: "¿Dónde estamos ubicados?",
     description:
       "Estamos en Barranquilla. Te esperamos para vivir una experiencia de fe y comunidad.",
     address: "Cra. 9 # 63a - 54, El Bosque, Barranquilla, Atlantico",
@@ -232,7 +232,7 @@ export const homeContent: HomeContent = {
   },
     radio: {
     title: "Emisora en vivo",
-    description: "Transmision online de la congregacion.",
+    description: "Transmisión online de la congregación.",
     embedUrl: "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1",
   },
 };
