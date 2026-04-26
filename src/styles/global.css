@@ -61,6 +61,22 @@ html {
     box-shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06) !important;
 }
 
+/* ── Header color sync with Hero section ────────────────── */
+#siteHeader [data-header-inner] {
+    background-color: rgba(255, 241, 242, 0.96); /* rose-50 — matches Hero */
+    border-color: rgba(255, 205, 211, 0.5);       /* rose-200/50 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition:
+        background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color     0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#siteHeader[data-scrolled] [data-header-inner] {
+    background-color: rgba(255, 255, 255, 0.92); /* white */
+    border-color: #e7e5e4;                        /* stone-200 */
+}
+
 /* ── Radio waveform animation ───────────────────────────── */
 @keyframes waveBar {
     0%, 100% { transform: scaleY(0.3); }
