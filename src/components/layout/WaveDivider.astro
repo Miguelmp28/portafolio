@@ -7,9 +7,20 @@ interface Props {
 
 const { fromBg, toFill, flip = false } = Astro.props;
 
-const path = flip
-  ? "M0,40 C240,10 480,70 720,40 C960,10 1200,70 1440,40 L1440,80 L0,80 Z"
-  : "M0,40 C240,70 480,10 720,40 C960,70 1200,10 1440,40 L1440,80 L0,80 Z";
+/*
+  Two stacked waves:
+    back  — wider, slower curves, lighter opacity → depth
+    front — tighter, main visible wave
+  All coordinates are in a 1440×120 viewBox.
+  flip=true mirrors both vertically (for upward waves).
+*/
+const frontPath = flip
+  ? "M0,60 C180,20 360,100 540,55 C720,10 900,90 1080,50 C1260,10 1380,70 1440,45 L1440,120 L0,120 Z"
+  : "M0,60 C180,100 360,20 540,65 C720,110 900,30 1080,70 C1260,110 1380,50 1440,75 L1440,120 L0,120 Z";
+
+const backPath = flip
+  ? "M0,80 C200,50 400,110 600,70 C800,30 1000,100 1200,65 C1320,45 1400,80 1440,72 L1440,120 L0,120 Z"
+  : "M0,80 C200,110 400,50 600,90 C800,130 1000,60 1200,95 C1320,115 1400,80 1440,88 L1440,120 L0,120 Z";
 ---
 
 <div
@@ -18,10 +29,14 @@ const path = flip
   aria-hidden="true"
 >
   <svg
-    viewBox="0 0 1440 80"
+    viewBox="0 0 1440 120"
     preserveAspectRatio="none"
-    class="block h-10 w-full sm:h-14 lg:h-16"
+    class="block h-14 w-full sm:h-20 lg:h-24"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <path d={path} fill={toFill} />
+    <!-- Back wave: same fill, lower opacity → layered depth effect -->
+    <path d={backPath}  fill={toFill} fill-opacity="0.4" />
+    <!-- Front wave: full opacity -->
+    <path d={frontPath} fill={toFill} fill-opacity="1"   />
   </svg>
 </div>

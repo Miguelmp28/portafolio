@@ -11,18 +11,18 @@ interface Props {
 const { contact } = Astro.props;
 ---
 
-<section id="contacto" class="bg-white py-16 sm:py-20">
+<section id="contacto" class="bg-stone-900 py-16 sm:py-20">
   <div class="mx-auto w-[min(1120px,92vw)]">
 
     <div
-      class="rounded-2xl border border-stone-200 bg-stone-50 p-6 shadow-sm sm:p-8"
+      class="rounded-2xl border border-stone-700 bg-stone-800 p-6 shadow-sm sm:p-8"
       data-reveal
       style="--reveal-from: translateY(32px) scale(0.98);"
     >
       <h2
         data-reveal
         style="--reveal-from: translateX(-24px); --reveal-delay: 80ms;"
-        class="text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl"
+        class="text-2xl font-bold tracking-tight text-white sm:text-3xl"
       >
         {contact.title}
       </h2>
@@ -30,7 +30,7 @@ const { contact } = Astro.props;
       <p
         data-reveal
         style="--reveal-from: translateY(18px); --reveal-delay: 160ms;"
-        class="mt-2 text-sm text-stone-600 sm:text-base"
+        class="mt-2 text-sm text-stone-400 sm:text-base"
       >
         {contact.description}
       </p>
@@ -38,7 +38,7 @@ const { contact } = Astro.props;
       <p
         data-reveal
         style="--reveal-from: translateY(18px); --reveal-delay: 220ms;"
-        class="mt-3 text-sm font-semibold text-stone-800 sm:text-base"
+        class="mt-3 text-sm font-semibold text-stone-300 sm:text-base"
       >
         {contact.address}
       </p>
@@ -51,7 +51,7 @@ const { contact } = Astro.props;
           href={contact.mapUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-5 inline-flex rounded-full border border-stone-300 bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-300 hover:bg-rose-600"
+          class="mt-5 inline-flex rounded-full border border-stone-600 bg-white px-5 py-2.5 text-sm font-semibold text-stone-900 shadow-sm transition-colors duration-300 hover:bg-rose-500 hover:text-white hover:border-rose-500"
         >
           Ver en Google Maps
         </a>

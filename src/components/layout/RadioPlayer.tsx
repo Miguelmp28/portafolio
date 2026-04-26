@@ -78,7 +78,7 @@ export default function RadioPlayer({ embedUrl, title }: Props) {
           "transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50",
           playing
             ? "bg-rose-600 shadow-rose-600/30 hover:bg-rose-700"
-            : "bg-stone-900 shadow-stone-900/30 hover:bg-rose-600",
+            : "bg-green-600 shadow-green-900/30 hover:bg-green-800",
         ].join(" ")}
       >
         <span

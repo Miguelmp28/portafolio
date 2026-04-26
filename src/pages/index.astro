@@ -6,8 +6,8 @@ import RadioPlayer  from "@/components/layout/RadioPlayer.astro";
 import WaveDivider  from "@/components/layout/WaveDivider.astro";
 import Hero         from "@/components/sections/Hero.astro";
 import Ministries   from "@/components/sections/Ministries.astro";
-import Gallery      from "@/components/sections/Gallery.astro";
 import Schedule     from "@/components/sections/Schedule.astro";
+import Gallery      from "@/components/sections/Gallery.astro";
 import Contact      from "@/components/sections/Contact.astro";
 import "@/styles/global.css";
 
@@ -41,31 +41,25 @@ const data = siteContent;
       <Header brand={data.brand} links={data.navLinks} />
 
       <main>
-        <!-- 1. Hook — rose-50 (#fff1f2) -->
+        <!-- 1. Hero — rose-50 -->
         <Hero hero={data.hero} />
 
         <!-- rose-50 → white -->
         <WaveDivider fromBg="#fff1f2" toFill="#ffffff" />
 
-        <!-- 2. Qué ofrecemos — white -->
+        <!-- 2. Ministerios — white -->
         <Ministries ministries={data.ministries} />
 
-        <!-- white → stone-900 (#1c1917) -->
-        <WaveDivider fromBg="#ffffff" toFill="#1c1917" flip />
-
-        <!-- 3. Prueba social — stone-900 -->
-        <Gallery gallery={data.gallery} />
-
-        <!-- stone-900 → amber-50 -->
-        <WaveDivider fromBg="#1c1917" toFill="#fffbeb" />
-
-        <!-- 4. Cuándo venir — amber-50 -->
+        <!-- 3. Agenda — white (mismo bg, sin onda) -->
         <Schedule events={data.events} />
 
-        <!-- amber-50 → white -->
-        <WaveDivider fromBg="#fffbeb" toFill="#ffffff" flip />
+        <!-- white → stone-900 -->
+        <WaveDivider fromBg="#ffffff" toFill="#1c1917" flip />
 
-        <!-- 5. Dónde encontrarnos — white -->
+        <!-- 4. Galeria — stone-900 -->
+        <Gallery gallery={data.gallery} />
+
+        <!-- 5. Contacto — stone-900 (mismo bg, sin onda) -->
         <Contact contact={data.contact} />
       </main>
 
