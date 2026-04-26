@@ -1,0 +1,27 @@
+---
+interface Props {
+  fromBg: string;
+  toFill: string;
+  flip?: boolean;
+}
+
+const { fromBg, toFill, flip = false } = Astro.props;
+
+const path = flip
+  ? "M0,40 C240,10 480,70 720,40 C960,10 1200,70 1440,40 L1440,80 L0,80 Z"
+  : "M0,40 C240,70 480,10 720,40 C960,70 1200,10 1440,40 L1440,80 L0,80 Z";
+---
+
+<div
+  class="w-full overflow-hidden leading-[0]"
+  style={`background-color: ${fromBg}`}
+  aria-hidden="true"
+>
+  <svg
+    viewBox="0 0 1440 80"
+    preserveAspectRatio="none"
+    class="block h-10 w-full sm:h-14 lg:h-16"
+  >
+    <path d={path} fill={toFill} />
+  </svg>
+</div>

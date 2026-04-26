@@ -1,0 +1,55 @@
+---
+interface Props {
+  hero: {
+    title?: string;
+    description: string;
+    primaryCta: { href: string; label: string };
+    secondaryCta: { href: string; label: string };
+  };
+}
+
+const { hero } = Astro.props;
+---
+
+<section id="inicio" class="bg-rose-50 pt-28 pb-16 sm:pt-32 sm:pb-20">
+  <div class="mx-auto w-[min(1120px,92vw)]">
+
+    {hero.title && (
+      <h1
+        data-reveal
+        style="--reveal-from: translateX(-28px); --reveal-delay: 80ms;"
+        class="max-w-[20ch] text-3xl font-extrabold leading-tight tracking-tight text-stone-900 sm:text-4xl lg:text-5xl"
+      >
+        {hero.title}
+      </h1>
+    )}
+
+    <p
+      data-reveal
+      style="--reveal-from: translateY(24px); --reveal-delay: 180ms;"
+      class="mt-4 max-w-xl text-sm leading-relaxed text-stone-600 sm:text-base"
+    >
+      {hero.description}
+    </p>
+
+    <div
+      class="mt-7 flex flex-wrap gap-3"
+      data-reveal
+      style="--reveal-from: translateY(20px) scale(0.96); --reveal-delay: 280ms;"
+    >
+      <a
+        href={hero.primaryCta.href}
+        class="inline-flex items-center rounded-full bg-stone-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-300 hover:bg-rose-600"
+      >
+        {hero.primaryCta.label}
+      </a>
+      <a
+        href={hero.secondaryCta.href}
+        class="inline-flex items-center rounded-full border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-stone-700 shadow-sm transition-colors duration-300 hover:border-stone-400 hover:bg-stone-50"
+      >
+        {hero.secondaryCta.label}
+      </a>
+    </div>
+
+  </div>
+</section>

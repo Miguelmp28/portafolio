@@ -1,16 +1,17 @@
 ---
-import { getHomePageData } from "@/application/home/getHomePageData";
-import SidebarNav from "@/presentation/components/home/SidebarNav.astro";
-import HeroSection from "@/presentation/components/home/HeroSection.astro";
-import AgendaSection from "@/presentation/components/home/AgendaSection.astro";
-import GallerySection from "@/presentation/components/home/GallerySection.astro";
-import MinistriesSection from "@/presentation/components/home/MinistriesSection.astro";
-import ContactSection from "@/presentation/components/home/ContactSection.astro";
-import SiteFooter from "@/presentation/components/home/SiteFooter.astro";
-import RadioFloatPlayer from "@/presentation/components/home/RadioFloatPlayer.astro";
+import { siteContent } from "@/data/content";
+import Header       from "@/components/layout/Header.astro";
+import Footer       from "@/components/layout/Footer.astro";
+import RadioPlayer  from "@/components/layout/RadioPlayer.astro";
+import WaveDivider  from "@/components/layout/WaveDivider.astro";
+import Hero         from "@/components/sections/Hero.astro";
+import Ministries   from "@/components/sections/Ministries.astro";
+import Gallery      from "@/components/sections/Gallery.astro";
+import Schedule     from "@/components/sections/Schedule.astro";
+import Contact      from "@/components/sections/Contact.astro";
 import "@/styles/global.css";
 
-const data = getHomePageData();
+const data = siteContent;
 ---
 
 <html lang="es">
@@ -18,11 +19,8 @@ const data = getHomePageData();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Iglesia Cristiana Amor</title>
-    <link rel="icon" type="image/webp" href="/assests/logo.webp">
-    <meta
-      name="description"
-      content="Comunidad de fe para crecer, servir y caminar juntos en Cristo."
-    />
+    <link rel="icon" type="image/webp" href="/assests/logo.webp" />
+    <meta name="description" content="Comunidad de fe para crecer, servir y caminar juntos en Cristo." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,31 +28,51 @@ const data = getHomePageData();
       rel="stylesheet"
     />
   </head>
-  <body
-    class="min-h-screen bg-zinc-50 text-zinc-900"
-    style="font-family: 'Outfit', sans-serif;"
-  >
-    <!-- Fondo animado (canvas insertado por faith-bg.js, z-index 0) -->
+
+  <body class="min-h-screen bg-stone-50 text-stone-900" style="font-family: 'Outfit', sans-serif;">
+
+    <!-- Fondo animado -->
     <div
       aria-hidden="true"
-      class="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(to_bottom,rgba(250,250,250,0.12),rgba(244,244,245,0.56)_42%),repeating-linear-gradient(to_right,rgba(120,113,108,0.035)_0_1px,transparent_1px_72px)]"
+      class="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(to_bottom,rgba(250,250,249,0.12),rgba(245,245,244,0.56)_42%),repeating-linear-gradient(to_right,rgba(120,113,108,0.03)_0_1px,transparent_1px_72px)]"
     ></div>
 
     <div class="relative z-[2]">
-      <SidebarNav brand={data.brand} links={data.navLinks} />
+      <Header brand={data.brand} links={data.navLinks} />
 
-      <main class="space-y-9 pb-7 pt-20 sm:pt-24">
-        <HeroSection hero={data.hero} />
-        <AgendaSection events={data.events} />
-        <GallerySection gallery={data.gallery} />
-        <MinistriesSection ministries={data.ministries} />
-        <ContactSection contact={data.contact} />
+      <main>
+        <!-- 1. Hook — rose-50 (#fff1f2) -->
+        <Hero hero={data.hero} />
+
+        <!-- rose-50 → white -->
+        <WaveDivider fromBg="#fff1f2" toFill="#ffffff" />
+
+        <!-- 2. Qué ofrecemos — white -->
+        <Ministries ministries={data.ministries} />
+
+        <!-- white → stone-900 (#1c1917) -->
+        <WaveDivider fromBg="#ffffff" toFill="#1c1917" flip />
+
+        <!-- 3. Prueba social — stone-900 -->
+        <Gallery gallery={data.gallery} />
+
+        <!-- stone-900 → amber-50 -->
+        <WaveDivider fromBg="#1c1917" toFill="#fffbeb" />
+
+        <!-- 4. Cuándo venir — amber-50 -->
+        <Schedule events={data.events} />
+
+        <!-- amber-50 → white -->
+        <WaveDivider fromBg="#fffbeb" toFill="#ffffff" flip />
+
+        <!-- 5. Dónde encontrarnos — white -->
+        <Contact contact={data.contact} />
       </main>
 
-      <SiteFooter />
+      <Footer />
     </div>
 
-    <RadioFloatPlayer radio={data.radio} />
+    <RadioPlayer radio={data.radio} />
 
     <script type="module" src="/scripts/home-ui.js"></script>
     <script defer src="/scripts/faith-bg.js"></script>

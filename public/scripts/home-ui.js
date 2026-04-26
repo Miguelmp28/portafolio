@@ -322,3 +322,43 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("scroll", syncScrollTopButton, { passive: true });
 syncScrollTopButton();
+
+// ── Scroll reveal ────────────────────────────────────────────────────────────
+(function () {
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReduced) return;
+
+  // Track pending re-shows: when an element leaves, we schedule its class removal
+  // so the next entrance animates again from the start.
+  const exitTimers = new WeakMap();
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const el = entry.target;
+
+        if (entry.isIntersecting) {
+          // Cancel any pending exit reset so the element doesn't flicker
+          const t = exitTimers.get(el);
+          if (t !== undefined) {
+            clearTimeout(t);
+            exitTimers.delete(el);
+          }
+          el.classList.add("is-visible");
+        } else {
+          // Wait for the transition to finish before resetting,
+          // so the exit is invisible and the next entrance is fresh.
+          const delay = parseFloat(getComputedStyle(el).transitionDuration || "0") * 1000;
+          const t = setTimeout(() => {
+            el.classList.remove("is-visible");
+            exitTimers.delete(el);
+          }, delay + 80);
+          exitTimers.set(el, t);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -32px 0px" },
+  );
+
+  document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+})();

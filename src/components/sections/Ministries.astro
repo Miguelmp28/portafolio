@@ -1,0 +1,54 @@
+---
+interface Props {
+  ministries: string[];
+}
+
+const { ministries } = Astro.props;
+---
+
+<section id="ministerios" class="bg-white py-16 sm:py-20">
+  <div class="mx-auto w-[min(1120px,92vw)]">
+
+    <h2
+      data-reveal
+      style="--reveal-from: translateX(-28px);"
+      class="text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl"
+    >
+      Ministerios activos
+    </h2>
+    <p
+      data-reveal
+      style="--reveal-from: translateY(20px); --reveal-delay: 80ms;"
+      class="mt-1 text-sm text-stone-500 sm:text-base"
+    >
+      Conoce las areas donde servimos.
+    </p>
+
+    <div
+      class="mt-6"
+      data-reveal
+      style="--reveal-from: translateY(28px); --reveal-delay: 160ms;"
+    >
+      <div class="overflow-hidden rounded-2xl">
+        <div
+          id="ministryTrack"
+          class="carousel-track flex gap-3 transition-transform duration-700 ease-out will-change-transform"
+          data-carousel
+        >
+          {ministries.map((item) => (
+            <div class="carousel-item shrink-0 basis-[48%] rounded-xl border border-stone-200 bg-amber-50/60 px-3 py-2.5 text-sm font-medium text-stone-700 transition-colors duration-300 hover:border-amber-300 hover:bg-amber-100/60 lg:basis-[19%]">
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div
+        data-reveal
+        style="--reveal-from: scale(0.8); --reveal-delay: 260ms; --reveal-dur: 500ms;"
+        class="mt-3 flex items-center justify-center gap-2"
+        data-carousel-dots-for="ministryTrack"
+      ></div>
+    </div>
+
+  </div>
+</section>

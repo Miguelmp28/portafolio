@@ -1,0 +1,19 @@
+---
+import ReactRadioPlayer from "./RadioPlayer.tsx";
+
+interface Props {
+  radio: {
+    title: string;
+    description: string;
+    embedUrl: string;
+  };
+}
+
+const { radio } = Astro.props;
+---
+
+<ReactRadioPlayer
+  client:idle
+  embedUrl={radio.embedUrl}
+  title={radio.title}
+/>
