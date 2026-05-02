@@ -1,14 +1,15 @@
 ---
 import { siteContent } from "@/data/content";
-import Header       from "@/components/layout/Header.astro";
-import Footer       from "@/components/layout/Footer.astro";
-import RadioPlayer  from "@/components/layout/RadioPlayer.astro";
-import WaveDivider  from "@/components/layout/WaveDivider.astro";
-import Hero         from "@/components/sections/Hero.astro";
-import Ministries   from "@/components/sections/Ministries.astro";
-import Schedule     from "@/components/sections/Schedule.astro";
-import Gallery      from "@/components/sections/Gallery.astro";
-import Contact      from "@/components/sections/Contact.astro";
+import HeaderReact   from "@/components/layout/Header";
+import Footer        from "@/components/layout/Footer.astro";
+import RadioPlayer   from "@/components/layout/RadioPlayer.astro";
+import WaveDivider   from "@/components/layout/WaveDivider.astro";
+import HeroReact     from "@/components/sections/Hero";
+import About         from "@/components/sections/About";
+import Ministries    from "@/components/sections/Ministries";
+import Schedule      from "@/components/sections/Schedule";
+import Gallery       from "@/components/sections/Gallery";
+import Contact       from "@/components/sections/Contact";
 import "@/styles/global.css";
 
 const data = siteContent;
@@ -31,36 +32,37 @@ const data = siteContent;
 
   <body class="min-h-screen bg-stone-50 text-stone-900" style="font-family: 'Outfit', sans-serif;">
 
-    <!-- Fondo animado -->
+    <!-- Fondo sutil -->
     <div
       aria-hidden="true"
       class="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(to_bottom,rgba(250,250,249,0.12),rgba(245,245,244,0.56)_42%),repeating-linear-gradient(to_right,rgba(120,113,108,0.03)_0_1px,transparent_1px_72px)]"
     ></div>
 
     <div class="relative z-[2]">
-      <Header brand={data.brand} links={data.navLinks} />
+      <!-- Header con React: scroll, mobile menu, scroll-to-top -->
+      <HeaderReact brand={data.brand} links={data.navLinks} client:load />
 
       <main>
-        <!-- 1. Hero — rose-50 -->
-        <Hero hero={data.hero} />
+        <!-- 1. Hero -->
+        <HeroReact hero={data.hero} client:load />
 
-        <!-- rose-50 → white -->
-        <WaveDivider fromBg="#fff1f2" toFill="#ffffff" />
+        <!-- 2. Quiénes somos -->
+        <About about={data.about} client:visible />
 
-        <!-- 2. Ministerios — white -->
-        <Ministries ministries={data.ministries} />
+        <!-- 3. Ministerios -->
+        <Ministries ministries={data.ministries} client:visible />
 
-        <!-- 3. Agenda — white (mismo bg, sin onda) -->
-        <Schedule events={data.events} />
+        <!-- 3. Agenda -->
+        <Schedule events={data.events} client:visible />
 
         <!-- white → stone-900 -->
-        <WaveDivider fromBg="#ffffff" toFill="#1c1917" flip />
+        <WaveDivider fromBg="#ffffff" toFill="#0c0a09" flip />
 
-        <!-- 4. Galeria — stone-900 -->
-        <Gallery gallery={data.gallery} />
+        <!-- 4. Galería -->
+        <Gallery gallery={data.gallery} client:visible />
 
-        <!-- 5. Contacto — stone-900 (mismo bg, sin onda) -->
-        <Contact contact={data.contact} />
+        <!-- 5. Contacto -->
+        <Contact contact={data.contact} client:visible />
       </main>
 
       <Footer />
@@ -68,7 +70,7 @@ const data = siteContent;
 
     <RadioPlayer radio={data.radio} />
 
-    <script type="module" src="/scripts/home-ui.js"></script>
+    <!-- Partículas animadas en el fondo -->
     <script defer src="/scripts/faith-bg.js"></script>
   </body>
 </html>

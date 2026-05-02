@@ -16,6 +16,13 @@ export interface GalleryItem {
   caption?: string;
 }
 
+export interface AboutSlide {
+  label: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
 export interface SiteContent {
   brand: {
     main: string;
@@ -26,6 +33,10 @@ export interface SiteContent {
     description: string;
     primaryCta: { href: string; label: string };
     secondaryCta: { href: string; label: string };
+  };
+  about: {
+    badge: string;
+    slides: AboutSlide[];
   };
   navLinks: NavLink[];
   events: EventItem[];
@@ -62,8 +73,34 @@ export const siteContent: SiteContent = {
       label: "Ver galeria",
     },
   },
+  about: {
+    badge: "Quiénes somos",
+    slides: [
+      {
+        label: "Nuestra misión",
+        title: "Llevar esperanza a cada corazón.",
+        description:
+          "Somos enviados a proclamar el evangelio de Jesucristo en Barranquilla y más allá, formando discípulos que impacten su entorno con integridad, servicio y amor genuino.",
+        image: "/assests/img1.webp",
+      },
+      {
+        label: "Nuestra visión",
+        title: "Ser una iglesia de puertas abiertas.",
+        description:
+          "Visualizamos una comunidad donde nadie se queda afuera — jóvenes, familias, adultos mayores — todos creciendo juntos en la fe y encontrando su lugar en el cuerpo de Cristo.",
+        image: "/assests/img3.webp",
+      },
+      {
+        label: "Nuestra comunidad",
+        title: "Más de una congregación, una familia.",
+        description:
+          "Cada domingo y entre semana nos reunimos no solo para adorar, sino para vivir juntos. Compartimos victorias, cargamos cargas y celebramos la vida como la familia que somos.",
+        image: "/assests/img4.webp",
+      },
+    ],
+  },
   navLinks: [
-    { href: "#inicio", label: "Inicio" },
+    { href: "#quienes-somos", label: "Quiénes somos" },
     { href: "#agenda", label: "Agenda" },
     { href: "#galeria", label: "Galeria" },
     { href: "#ministerios", label: "Ministerios" },
