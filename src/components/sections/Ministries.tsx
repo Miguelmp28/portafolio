@@ -81,22 +81,25 @@ export default function Ministries({ ministries }: Props) {
 
   const measure = useCallback(() => {
     const track = trackRef.current;
-    const view = viewRef.current;
+    const view  = viewRef.current;
     if (!track || !view) return;
-    const first = track.children[0] as HTMLElement | undefined;
-    if (!first) return;
-    const gap = parseFloat(getComputedStyle(track).gap || "0");
-    const w = first.getBoundingClientRect().width + gap;
-    const pp = Math.max(1, Math.round((view.clientWidth + gap) / w));
-    setStepPx(w);
+    const vw  = view.clientWidth;
+    if (vw <= 0) return;
+    const gap = 12; // gap-3
+    const pp  = vw >= 1024 ? 3 : 2;
+    const itemW = Math.floor((vw - gap * (pp - 1)) / pp);
+    Array.from(track.children).forEach((el) => {
+      (el as HTMLElement).style.width = `${itemW}px`;
+    });
+    setStepPx(itemW + gap);
     setPerPage(pp);
     setItemIndex((i) => Math.min(i, Math.max(0, ministries.length - pp)));
   }, [ministries.length]);
 
   useEffect(() => {
-    measure();
+    const raf = requestAnimationFrame(measure);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", measure); };
   }, [measure]);
 
   useEffect(() => {
@@ -140,14 +143,14 @@ export default function Ministries({ ministries }: Props) {
           >
             <div
               ref={trackRef}
-              className="flex gap-3 transition-transform duration-700 ease-out will-change-transform"
+              className="flex w-full gap-3 transition-transform duration-700 ease-out will-change-transform"
             >
               {ministries.map((item, i) => {
                 const colors = CARD_COLORS[i % CARD_COLORS.length];
                 return (
                   <div
                     key={item}
-                    className={`shrink-0 basis-1/2 lg:basis-[calc(33.333%-8px)] rounded-2xl border ${colors.bg} ${colors.border} p-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md cursor-default`}
+                    className={`shrink-0 rounded-2xl border ${colors.bg} ${colors.border} p-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md cursor-default`}
                   >
                     <span className={`inline-flex h-9 w-9 items-center justify-center rounded-xl border ${colors.icon}`}>
                       {ministryIcon(item)}

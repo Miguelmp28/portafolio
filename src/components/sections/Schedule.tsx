@@ -55,22 +55,25 @@ export default function Schedule({ events }: Props) {
 
   const measure = useCallback(() => {
     const track = trackRef.current;
-    const view = viewRef.current;
+    const view  = viewRef.current;
     if (!track || !view) return;
-    const first = track.children[0] as HTMLElement | undefined;
-    if (!first) return;
-    const gap = parseFloat(getComputedStyle(track).gap || "0");
-    const w = first.getBoundingClientRect().width + gap;
-    const pp = Math.max(1, Math.round((view.clientWidth + gap) / w));
-    setStepPx(w);
+    const vw  = view.clientWidth;
+    if (vw <= 0) return;
+    const gap = 12; // gap-3
+    const pp  = vw >= 1024 ? 3 : 2;
+    const itemW = Math.floor((vw - gap * (pp - 1)) / pp);
+    Array.from(track.children).forEach((el) => {
+      (el as HTMLElement).style.width = `${itemW}px`;
+    });
+    setStepPx(itemW + gap);
     setPerPage(pp);
     setItemIndex((i) => Math.min(i, Math.max(0, events.length - pp)));
   }, [events.length]);
 
   useEffect(() => {
-    measure();
+    const raf = requestAnimationFrame(measure);
     window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", measure); };
   }, [measure]);
 
   useEffect(() => {
@@ -123,7 +126,7 @@ export default function Schedule({ events }: Props) {
           >
             <div
               ref={trackRef}
-              className="flex gap-3 transition-transform duration-700 ease-out will-change-transform"
+              className="flex w-full gap-3 transition-transform duration-700 ease-out will-change-transform"
             >
               {events.map((event) => {
                 const isToday = event.day === todayKey;
@@ -134,7 +137,7 @@ export default function Schedule({ events }: Props) {
                   <article
                     key={`${event.day}-${event.title}`}
                     className={[
-                      "shrink-0 basis-1/2 lg:basis-[calc(33.333%-8px)] rounded-2xl border p-4 shadow-sm transition-all duration-300 hover:shadow-md",
+                      "shrink-0 rounded-2xl border p-4 shadow-sm transition-all duration-300 hover:shadow-md",
                       isToday
                         ? "border-amber-400 bg-amber-50 shadow-amber-100"
                         : "border-stone-200 bg-stone-50 hover:border-stone-300",

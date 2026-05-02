@@ -7,18 +7,16 @@ interface Props {
 
 const { fromBg, toFill, flip = false } = Astro.props;
 
-
-const frontPath = flip
-  ? "M0,60 C180,20 360,100 540,55 C720,10 900,90 1080,50 C1260,10 1380,70 1440,45 L1440,120 L0,120 Z"
-  : "M0,60 C180,100 360,20 540,65 C720,110 900,30 1080,70 C1260,110 1380,50 1440,75 L1440,120 L0,120 Z";
-
-const backPath = flip
-  ? "M0,80 C200,50 400,110 600,70 C800,30 1000,100 1200,65 C1320,45 1400,80 1440,72 L1440,120 L0,120 Z"
-  : "M0,80 C200,110 400,50 600,90 C800,130 1000,60 1200,95 C1320,115 1400,80 1440,88 L1440,120 L0,120 Z";
+// Top-fill path: covers Y=0 → wave curve → back to Y=0
+// The rect below fills the whole SVG with toFill first,
+// then this path paints fromBg on top — no bottom gap possible.
+const topPath = flip
+  ? "M0,0 L0,62 C180,22 360,100 540,56 C720,12 900,88 1080,50 C1260,12 1380,68 1440,46 L1440,0 Z"
+  : "M0,0 L0,62 C180,100 360,22 540,66 C720,110 900,32 1080,70 C1260,108 1380,52 1440,74 L1440,0 Z";
 ---
 
 <div
-  class="w-full overflow-hidden leading-[0]"
+  class="w-full overflow-hidden leading-[0] -mb-px"
   style={`background-color: ${fromBg};`}
   aria-hidden="true"
 >
@@ -28,6 +26,9 @@ const backPath = flip
     class="block h-16 w-full sm:h-24 lg:h-32"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <path d={frontPath} fill={toFill} fill-opacity="1" />
+    <!-- Fill entire SVG with destination color — eliminates any bottom gap -->
+    <rect width="1440" height="100" fill={toFill} />
+    <!-- Draw the source color on top to create the wave shape -->
+    <path d={topPath} fill={fromBg} />
   </svg>
 </div>

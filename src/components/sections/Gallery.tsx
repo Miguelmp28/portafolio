@@ -252,7 +252,7 @@ export default function Gallery({ gallery }: Props) {
             >
               <div
                 ref={trackRef}
-                className="flex gap-3 transition-transform duration-700 ease-out will-change-transform"
+                className="flex w-full gap-3 transition-transform duration-700 ease-out will-change-transform"
               >
                 {gallery.map((image, i) => (
                   <figure
