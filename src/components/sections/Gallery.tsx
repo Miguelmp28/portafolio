@@ -1,5 +1,9 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import { useVisible, reveal as revealStyle } from "@/hooks/useVisible";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface GalleryItem {
   src: string;
@@ -53,15 +57,21 @@ function Lightbox({ image, onClose }: { image: GalleryItem; onClose: () => void 
 }
 
 export default function Gallery({ gallery }: Props) {
-  const [sectionRef, visible] = useVisible();
+  const sectionRef    = useRef<HTMLElement>(null);
+  const headerRef     = useRef<HTMLDivElement>(null);
+  const featuredBoxRef = useRef<HTMLDivElement>(null);  // overflow:hidden container
+  const featuredImgRef = useRef<HTMLImageElement>(null); // actual img (inner parallax)
+  const thumbColRef   = useRef<HTMLDivElement>(null);
+  const mobileRef     = useRef<HTMLDivElement>(null);
+
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
 
   /* ── Desktop: featured + thumbnails ── */
   const GROUP = 4;
   const totalGroups = Math.max(1, Math.ceil(gallery.length / GROUP));
-  const [groupIndex,     setGroupIndex]     = useState(0);
-  const [featuredIndex,  setFeaturedIndex]  = useState(0); // index within group
-  const [fading,         setFading]         = useState(false);
+  const [groupIndex,    setGroupIndex]    = useState(0);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [fading,        setFading]        = useState(false);
 
   const currentGroup = gallery.slice(groupIndex * GROUP, groupIndex * GROUP + GROUP);
   const featured     = currentGroup[featuredIndex] ?? currentGroup[0];
@@ -79,13 +89,12 @@ export default function Gallery({ gallery }: Props) {
     setTimeout(() => { setFeaturedIndex(indexInGroup); setFading(false); }, 320);
   };
 
-  /* Auto-play */
   useEffect(() => {
     const t = setInterval(nextGroup, 5000);
     return () => clearInterval(t);
   }, [groupIndex]);
 
-  /* ── Mobile: simple carousel ── */
+  /* ── Mobile: carousel ── */
   const trackRef = useRef<HTMLDivElement>(null);
   const viewRef  = useRef<HTMLDivElement>(null);
   const [itemIndex, setItemIndex] = useState(0);
@@ -129,33 +138,143 @@ export default function Gallery({ gallery }: Props) {
   const touchStart = useRef(0);
   const touchEnd   = useRef(0);
 
+  useGSAP(() => {
+    const section = sectionRef.current;
+
+    /* ── Header: scale + fade from center (not directional slide) ── */
+    gsap.fromTo(
+      headerRef.current,
+      { opacity: 0, scale: 0.94, y: -20 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 90%",
+          end: "top 58%",
+          scrub: 0.8,
+        },
+      }
+    );
+
+    /* ── Featured box: scale-up reveal ── */
+    gsap.fromTo(
+      featuredBoxRef.current,
+      { opacity: 0, scale: 0.9 },
+      {
+        opacity: 1,
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 80%",
+          end: "top 35%",
+          scrub: 1,
+        },
+      }
+    );
+
+    /* ── UNIQUE: Inner image parallax within fixed container ──
+       The img element moves up inside the overflow:hidden box.
+       Creates a "window into depth" effect — image appears to float inside.
+    ── */
+    gsap.to(featuredImgRef.current, {
+      y: "-12%",
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1.2,
+      },
+    });
+
+    /* ── Thumbnails: stagger from below with scale ── */
+    gsap.fromTo(
+      thumbColRef.current ? Array.from(thumbColRef.current.children) : [],
+      { opacity: 0, y: 40, scale: 0.88 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        stagger: { each: 0.12, from: "end" },
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 75%",
+          end: "top 20%",
+          scrub: 1,
+        },
+      }
+    );
+
+    /* ── UNIQUE: Scroll velocity → featured image scale reaction ──
+       The faster you scroll, the more the image breathes/scales.
+       Only fires when gallery is in viewport.
+    ── */
+    let prevY = window.scrollY;
+    let velocity = 0;
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      velocity = currentY - prevY;
+      prevY = currentY;
+
+      if (!featuredImgRef.current || !section) return;
+      const rect = section.getBoundingClientRect();
+      if (rect.top > window.innerHeight || rect.bottom < 0) return;
+
+      const boost = Math.min(Math.abs(velocity) * 0.0035, 0.07);
+      gsap.to(featuredImgRef.current, {
+        scale: 1.02 + boost,
+        duration: 0.55,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    /* ── Mobile: scrub fade up ── */
+    gsap.fromTo(
+      mobileRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 88%",
+          end: "top 40%",
+          scrub: 1,
+        },
+      }
+    );
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, { scope: sectionRef });
+
   return (
     <>
       {lightbox && <Lightbox image={lightbox} onClose={() => setLightbox(null)} />}
 
-      <section id="galeria" className="bg-stone-950 py-16 sm:py-20">
-        <div ref={sectionRef} className="mx-auto w-[min(1120px,92vw)]">
+      <section ref={sectionRef} id="galeria" className="bg-stone-950 py-16 sm:py-20 overflow-hidden">
+        <div className="mx-auto w-[min(1120px,92vw)]">
 
           {/* Header */}
-          <div className="flex items-end justify-between">
+          <div ref={headerRef} className="flex items-end justify-between">
             <div>
-              <div style={revealStyle(visible, "translateX(-24px)")}>
-                <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                  Galería de comunidad
-                </h2>
-              </div>
-              <div style={revealStyle(visible, "translateY(16px)", "80ms")}>
-                <p className="mt-1 text-sm text-stone-400 sm:text-base">
-                  Momentos de fe, esperanza y vida en comunidad.
-                </p>
-              </div>
+              <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Galería de comunidad
+              </h2>
+              <p className="mt-1 text-sm text-stone-400 sm:text-base">
+                Momentos de fe, esperanza y vida en comunidad.
+              </p>
             </div>
-
-            {/* Group counter — desktop only */}
-            <div
-              className="hidden lg:flex items-center gap-1.5 text-xs font-medium text-stone-500"
-              style={revealStyle(visible, "translateY(12px)", "120ms")}
-            >
+            <div className="hidden lg:flex items-center gap-1.5">
               {Array.from({ length: totalGroups }).map((_, i) => (
                 <button
                   key={i}
@@ -171,47 +290,41 @@ export default function Gallery({ gallery }: Props) {
             </div>
           </div>
 
-          {/* ── Desktop: featured layout ── */}
-          <div
-            className="mt-8 hidden lg:grid lg:grid-cols-[1fr_auto] lg:gap-3"
-            style={revealStyle(visible, "translateY(28px)", "160ms")}
-          >
-            {/* Featured image */}
+          {/* ── Desktop layout ── */}
+          <div className="mt-8 hidden lg:grid lg:grid-cols-[1fr_auto] lg:gap-3">
+
+            {/* Featured image — overflow:hidden is the clipping window */}
             <div
-              className="relative cursor-pointer overflow-hidden rounded-2xl bg-stone-800"
+              ref={featuredBoxRef}
+              className="relative cursor-pointer overflow-hidden rounded-2xl bg-stone-800 group"
               style={{ aspectRatio: "16/9" }}
               onClick={() => setLightbox(featured)}
             >
+              {/* img is slightly taller so inner parallax doesn't show white gaps */}
               <img
+                ref={featuredImgRef}
                 src={featured?.src}
                 alt={featured?.alt}
                 loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-x-0 w-full object-cover will-change-transform transition-opacity duration-300 group-hover:transition-none"
                 style={{
+                  top: "-8%",
+                  height: "116%",
                   opacity: fading ? 0 : 1,
-                  transform: fading ? "scale(1.04)" : "scale(1)",
-                  transition: "opacity 320ms cubic-bezier(0.4,0,0.2,1), transform 320ms cubic-bezier(0.4,0,0.2,1)",
+                  transition: fading ? "opacity 320ms ease" : "opacity 320ms ease, transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94)",
                 }}
               />
               {/* Caption overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
-                <div>
-                  {featured?.caption && (
-                    <p className="text-sm font-medium text-white">{featured.caption}</p>
-                  )}
-                  <p className="mt-1 text-xs text-white/60">Clic para ampliar</p>
-                </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex items-end p-5">
+                {featured?.caption && (
+                  <p className="text-sm font-medium text-white">{featured.caption}</p>
+                )}
               </div>
-              {/* Zoom badge */}
-              <div className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm opacity-0 hover:opacity-100 transition-opacity duration-300">
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                  <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35M11 8v6M8 11h6" />
-                </svg>
-              </div>
+              <div className="absolute inset-0 ring-0 group-hover:ring-2 group-hover:ring-rose-500/30 rounded-2xl transition-all duration-500" />
             </div>
 
             {/* Thumbnail column */}
-            <div className="flex w-48 flex-col gap-3">
+            <div ref={thumbColRef} className="flex w-48 flex-col gap-3">
               {thumbs.map((img, i) => (
                 <div
                   key={`${img.src}-${i}`}
@@ -219,8 +332,7 @@ export default function Gallery({ gallery }: Props) {
                   onClick={() => selectThumb(currentGroup.indexOf(img))}
                   style={{
                     opacity: fading ? 0.5 : 1,
-                    transform: fading ? "scale(0.97)" : "scale(1)",
-                    transition: "opacity 320ms ease, transform 320ms ease",
+                    transition: "opacity 320ms ease",
                   }}
                 >
                   <img
@@ -230,16 +342,14 @@ export default function Gallery({ gallery }: Props) {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-stone-950/40 opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
+                  <div className="absolute inset-0 ring-0 group-hover:ring-2 group-hover:ring-rose-500/40 rounded-xl transition-all duration-300" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ── Mobile: carousel ── */}
-          <div
-            className="mt-8 lg:hidden"
-            style={revealStyle(visible, "translateY(28px)", "160ms")}
-          >
+          {/* ── Mobile carousel ── */}
+          <div ref={mobileRef} className="mt-8 lg:hidden">
             <div
               ref={viewRef}
               className="overflow-hidden rounded-2xl"
