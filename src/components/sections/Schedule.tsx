@@ -1,5 +1,9 @@
 import { useRef, useEffect, useState, useCallback } from "react";
-import { useVisible, reveal as revealStyle } from "@/hooks/useVisible";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface EventItem {
   day: string;
@@ -31,15 +35,18 @@ const DAY_COLORS: Record<string, string> = {
 };
 
 export default function Schedule({ events }: Props) {
-  const [sectionRef, visible] = useVisible();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const viewRef = useRef<HTMLDivElement>(null);
-  const [itemIndex, setItemIndex] = useState(0);
-  const [stepPx, setStepPx] = useState(0);
-  const [perPage, setPerPage] = useState(2);
-  const [todayKey, setTodayKey] = useState<string | null>(null);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const headingRef  = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const trackRef    = useRef<HTMLDivElement>(null);
+  const viewRef     = useRef<HTMLDivElement>(null);
 
-  const maxIndex = Math.max(0, events.length - perPage);
+  const [itemIndex, setItemIndex] = useState(0);
+  const [stepPx, setStepPx]       = useState(0);
+  const [perPage, setPerPage]     = useState(2);
+  const [todayKey, setTodayKey]   = useState<string | null>(null);
+
+  const maxIndex   = Math.max(0, events.length - perPage);
   const totalPages = Math.max(1, Math.ceil(events.length / perPage));
   const activePage = Math.round(itemIndex / Math.max(1, perPage));
 
@@ -48,7 +55,7 @@ export default function Schedule({ events }: Props) {
       weekday: "long",
       timeZone: "America/Bogota",
     }).format(new Date());
-    const norm = normalize(bogotaDay);
+    const norm  = normalize(bogotaDay);
     const alias = DAY_ALIASES[norm];
     if (alias) setTodayKey(alias);
   }, []);
@@ -59,7 +66,7 @@ export default function Schedule({ events }: Props) {
     if (!track || !view) return;
     const vw  = view.clientWidth;
     if (vw <= 0) return;
-    const gap = 12; // gap-3
+    const gap = 12;
     const pp  = vw >= 1024 ? 3 : 2;
     const itemW = Math.floor((vw - gap * (pp - 1)) / pp);
     Array.from(track.children).forEach((el) => {
@@ -82,13 +89,10 @@ export default function Schedule({ events }: Props) {
     }
   }, [itemIndex, stepPx]);
 
-  // Navigate to today's event
   useEffect(() => {
     if (!todayKey) return;
     const idx = events.findIndex((e) => e.day === todayKey);
-    if (idx >= 0) {
-      setItemIndex(Math.min(idx, maxIndex));
-    }
+    if (idx >= 0) setItemIndex(Math.min(idx, maxIndex));
   }, [todayKey, maxIndex, events]);
 
   const next = () => setItemIndex((i) => Math.min(maxIndex, i + perPage));
@@ -96,29 +100,88 @@ export default function Schedule({ events }: Props) {
   const goTo = (p: number) => setItemIndex(Math.max(0, Math.min(maxIndex, p * perPage)));
 
   const touchStart = useRef(0);
-  const touchEnd = useRef(0);
+  const touchEnd   = useRef(0);
+
+  useGSAP(() => {
+    const section = sectionRef.current;
+
+    /* ── UNIQUE: heading slides in from the RIGHT — opposite of all other sections ──
+       Creates immediate directional contrast. The user feels "this is different."
+    ── */
+    gsap.fromTo(
+      headingRef.current ? Array.from(headingRef.current.children) : [],
+      { opacity: 0, x: 60 },
+      {
+        opacity: 1,
+        x: 0,
+        stagger: { each: 0.12, from: "end" }, // also reversed: last child first
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 88%",
+          end: "top 58%",
+          scrub: 0.8,
+        },
+      }
+    );
+
+    /* ── UNIQUE: Cards cascade in from right, stagger reversed ──
+       Like a timeline being drawn right-to-left: last card appears first,
+       then the rest fill in leftward. Creates a directional "flow" feeling.
+    ── */
+    const cards = trackRef.current ? Array.from(trackRef.current.children) : [];
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, x: 70, scale: 0.92 },
+      {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        stagger: { each: 0.07, from: "end" }, // right-to-left cascade
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 82%",
+          end: "top 25%",
+          scrub: 1,
+        },
+      }
+    );
+
+    /* ── Carousel block: subtle upward drift as you scroll through ── */
+    gsap.to(carouselRef.current, {
+      y: -18,
+      ease: "none",
+      scrollTrigger: {
+        trigger: section,
+        start: "top 25%",
+        end: "bottom top",
+        scrub: 2,
+      },
+    });
+  }, { scope: sectionRef });
 
   return (
-    <section id="agenda" className="bg-white py-16 sm:py-20">
-      <div ref={sectionRef} className="mx-auto w-[min(1120px,92vw)]">
+    <section ref={sectionRef} id="agenda" className="bg-white py-16 sm:py-20 overflow-hidden">
+      <div className="mx-auto w-[min(1120px,92vw)]">
 
-        <div style={revealStyle(visible, "translateX(-28px)")}>
+        {/* Heading: enters from the RIGHT (directionally unique) */}
+        <div ref={headingRef}>
           <h2 className="text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl">
             Agenda de la semana
           </h2>
-        </div>
-        <div style={revealStyle(visible, "translateY(20px)", "80ms")}>
           <p className="mt-1 text-sm text-stone-600 sm:text-base">
             Ven y participa en nuestros encuentros de fe.
           </p>
         </div>
 
-        <div className="mt-8" style={revealStyle(visible, "translateY(28px)", "160ms")}>
+        <div ref={carouselRef} className="mt-8">
           <div
             ref={viewRef}
             className="overflow-hidden"
             onTouchStart={(e) => { touchStart.current = e.touches[0].clientX; }}
-            onTouchMove={(e) => { touchEnd.current = e.touches[0].clientX; }}
+            onTouchMove={(e)  => { touchEnd.current   = e.touches[0].clientX; }}
             onTouchEnd={() => {
               const delta = touchEnd.current - touchStart.current;
               if (Math.abs(delta) > 40) { delta < 0 ? next() : prev(); }
@@ -129,15 +192,15 @@ export default function Schedule({ events }: Props) {
               className="flex w-full gap-3 transition-transform duration-700 ease-out will-change-transform"
             >
               {events.map((event) => {
-                const isToday = event.day === todayKey;
-                const dayNorm = normalize(event.day);
+                const isToday    = event.day === todayKey;
+                const dayNorm    = normalize(event.day);
                 const dayColorClass = DAY_COLORS[dayNorm] ?? "text-stone-700 bg-stone-100 border-stone-300";
 
                 return (
                   <article
                     key={`${event.day}-${event.title}`}
                     className={[
-                      "shrink-0 rounded-2xl border p-4 shadow-sm transition-all duration-300 hover:shadow-md",
+                      "shrink-0 rounded-2xl border p-4 shadow-sm transition-all duration-300 hover:shadow-md will-change-transform",
                       isToday
                         ? "border-amber-400 bg-amber-50 shadow-amber-100"
                         : "border-stone-200 bg-stone-50 hover:border-stone-300",
@@ -145,13 +208,11 @@ export default function Schedule({ events }: Props) {
                   >
                     {isToday && (
                       <div className="mb-2 flex items-center gap-1.5">
-                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                         <span className="text-xs font-bold text-amber-700 uppercase tracking-wide">Hoy</span>
                       </div>
                     )}
-                    <span
-                      className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${dayColorClass}`}
-                    >
+                    <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide ${dayColorClass}`}>
                       {event.day}
                     </span>
                     <h3 className="mt-2.5 text-base font-bold text-stone-900 leading-snug">
@@ -177,11 +238,7 @@ export default function Schedule({ events }: Props) {
             </div>
           </div>
 
-          {/* Dots */}
-          <div
-            className="mt-4 flex items-center justify-center gap-2"
-            style={revealStyle(visible, "scale(0.8)", "260ms", "500ms")}
-          >
+          <div className="mt-4 flex items-center justify-center gap-2">
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}

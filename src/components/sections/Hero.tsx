@@ -2,6 +2,11 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+<<<<<<< HEAD
+=======
+import SplitType from "split-type";
+import { magneticHover } from "@/utils/motion";
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,12 +23,18 @@ export default function Hero({ hero }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const bgRef      = useRef<HTMLImageElement>(null);
   const badgeRef   = useRef<HTMLDivElement>(null);
+<<<<<<< HEAD
   const titleRef   = useRef<HTMLDivElement>(null);
   const descRef    = useRef<HTMLDivElement>(null);
+=======
+  const titleRef   = useRef<HTMLHeadingElement>(null);
+  const descRef    = useRef<HTMLParagraphElement>(null);
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
   const ctasRef    = useRef<HTMLDivElement>(null);
   const statsRef   = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+<<<<<<< HEAD
     /* ── Ken Burns en la imagen de fondo ── */
     gsap.from(bgRef.current, {
       scale: 1.1,
@@ -60,6 +71,84 @@ export default function Hero({ hero }: Props) {
       },
     });
 
+=======
+    /* ── SplitType: word-by-word reveals ── */
+    const splitTitle = titleRef.current
+      ? new SplitType(titleRef.current, { types: "words" })
+      : null;
+    const splitDesc = descRef.current
+      ? new SplitType(descRef.current, { types: "words" })
+      : null;
+
+    /* ── Ken Burns background ── */
+    gsap.from(bgRef.current, { scale: 1.12, duration: 7, ease: "power2.out" });
+
+    /* ── Cinematic entrance timeline ── */
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+    tl.from(badgeRef.current, { opacity: 0, y: 24, filter: "blur(8px)", duration: 1.0 });
+
+    if (splitTitle?.words?.length) {
+      tl.from(
+        splitTitle.words,
+        { opacity: 0, y: 44, filter: "blur(5px)", stagger: { each: 0.07, from: "start" }, duration: 0.85 },
+        "-=0.55"
+      );
+    } else if (titleRef.current) {
+      tl.from(titleRef.current, { opacity: 0, y: 36, duration: 1.0 }, "-=0.55");
+    }
+
+    if (splitDesc?.words?.length) {
+      tl.from(
+        splitDesc.words,
+        { opacity: 0, y: 22, stagger: { each: 0.035, from: "start" }, duration: 0.65 },
+        "-=0.45"
+      );
+    } else if (descRef.current) {
+      tl.from(descRef.current, { opacity: 0, y: 22, duration: 0.85 }, "-=0.45");
+    }
+
+    tl.from(
+      ctasRef.current ? Array.from(ctasRef.current.children) : [],
+      { opacity: 0, y: 20, stagger: 0.12, duration: 0.75 },
+      "-=0.35"
+    );
+    tl.from(
+      statsRef.current ? Array.from(statsRef.current.children) : [],
+      { opacity: 0, y: 18, stagger: 0.08, duration: 0.65 },
+      "-=0.4"
+    );
+
+    /* ── Magnetic CTAs ── */
+    const cleanups: Array<() => void> = [];
+    tl.call(() => {
+      if (ctasRef.current) {
+        Array.from(ctasRef.current.children).forEach((el) => {
+          cleanups.push(magneticHover(el as HTMLElement, 0.28));
+        });
+      }
+    });
+
+    /* ── Background parallax on scroll ── */
+    gsap.to(bgRef.current, {
+      yPercent: 20,
+      ease: "none",
+      scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: 1.5 },
+    });
+
+    /* ── Content parallax (slightly faster than bg) ── */
+    gsap.to(".hero-content-inner", {
+      yPercent: 8,
+      ease: "none",
+      scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: 2 },
+    });
+
+    return () => {
+      cleanups.forEach((fn) => fn());
+      splitTitle?.revert();
+      splitDesc?.revert();
+    };
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
   }, { scope: sectionRef });
 
   return (
@@ -67,9 +156,15 @@ export default function Hero({ hero }: Props) {
       ref={sectionRef}
       id="inicio"
       className="relative overflow-hidden"
+<<<<<<< HEAD
       style={{ minHeight: "92vh", marginBottom: "-1px" }}
     >
       {/* Imagen de fondo */}
+=======
+      style={{ height: "100vh" }}
+    >
+      {/* Background image */}
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
       <img
         ref={bgRef}
         src="/assests/img2.webp"
@@ -79,23 +174,35 @@ export default function Hero({ hero }: Props) {
         loading="eager"
       />
 
+<<<<<<< HEAD
       {/* Overlay base */}
       <div aria-hidden className="absolute inset-0 bg-stone-950/30" />
 
       {/* Gradiente móvil */}
+=======
+      {/* Base overlay */}
+      <div aria-hidden className="absolute inset-0 bg-stone-950/30" />
+
+      {/* Mobile gradient */}
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
       <div
         aria-hidden
         className="absolute inset-0"
         style={{ background: "linear-gradient(to bottom, rgba(10,6,4,0.82) 0%, rgba(10,6,4,0.78) 100%)" }}
       />
 
+<<<<<<< HEAD
       {/* Gradiente lateral desktop */}
+=======
+      {/* Desktop lateral gradient */}
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
       <div
         aria-hidden
         className="absolute inset-0 hidden lg:block"
         style={{ background: "linear-gradient(to right, rgba(10,6,4,0.90) 0%, rgba(10,6,4,0.88) 38%, rgba(10,6,4,0.55) 58%, rgba(10,6,4,0.10) 78%, transparent 100%)" }}
       />
 
+<<<<<<< HEAD
       {/* Tinte rose cálido */}
       <div
         aria-hidden
@@ -106,6 +213,23 @@ export default function Hero({ hero }: Props) {
       {/* Contenido — pb-20 en móvil para que la ola no tape los stats */}
       <div className="relative z-10 flex items-end pb-20 sm:items-center sm:pb-0" style={{ minHeight: "92vh" }}>
         <div className="mx-auto w-[min(1120px,92vw)] py-14 sm:py-20">
+=======
+      {/* Rose atmospheric glow */}
+      <div
+        aria-hidden
+        className="absolute inset-0 hidden lg:block hero-glow"
+        style={{ background: "linear-gradient(135deg, rgba(159,18,57,0.22) 0%, transparent 52%)" }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 70% 60% at 18% 50%, rgba(159,18,57,0.10) 0%, transparent 70%)" }}
+      />
+
+      {/* Content */}
+      <div className="relative z-[20] flex h-full items-end pb-14 sm:items-center sm:pb-0">
+        <div className="hero-content-inner mx-auto w-[min(1120px,92vw)] py-14 sm:py-20">
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
           <div className="lg:max-w-[52%]">
 
             {/* Badge */}
@@ -116,8 +240,9 @@ export default function Hero({ hero }: Props) {
               </span>
             </div>
 
-            {/* Título */}
+            {/* Title */}
             {hero.title && (
+<<<<<<< HEAD
               <div ref={titleRef}>
                 <h1 className="mt-5 max-w-[20ch] text-[clamp(2rem,4.5vw,3.25rem)] font-extrabold leading-tight tracking-tight text-white">
                   {hero.title}
@@ -131,12 +256,30 @@ export default function Hero({ hero }: Props) {
                 {hero.description}
               </p>
             </div>
+=======
+              <h1
+                ref={titleRef}
+                className="mt-5 max-w-[20ch] text-[clamp(2rem,4.5vw,3.25rem)] font-extrabold leading-tight tracking-tight text-white"
+              >
+                {hero.title}
+              </h1>
+            )}
+
+            {/* Description */}
+            <p
+              ref={descRef}
+              className="mt-4 max-w-md text-sm leading-relaxed text-white/75 sm:text-[0.9375rem]"
+            >
+              {hero.description}
+            </p>
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
 
             {/* CTAs */}
             <div ref={ctasRef} className="mt-8 flex flex-wrap gap-3">
               <a
                 href={hero.primaryCta.href}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-bold text-stone-900 shadow-lg transition-all duration-300 hover:bg-rose-50 hover:shadow-xl active:scale-95"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-sm font-bold text-stone-900 shadow-lg transition-colors duration-300 hover:bg-rose-50 hover:shadow-xl"
+                style={{ willChange: "transform" }}
               >
                 {hero.primaryCta.label}
                 <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -145,7 +288,8 @@ export default function Hero({ hero }: Props) {
               </a>
               <a
                 href={hero.secondaryCta.href}
-                className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/15 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/25 active:scale-95"
+                className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/15 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors duration-300 hover:bg-white/25 hover:border-white/50"
+                style={{ willChange: "transform" }}
               >
                 {hero.secondaryCta.label}
               </a>
@@ -168,6 +312,7 @@ export default function Hero({ hero }: Props) {
           </div>
         </div>
       </div>
+<<<<<<< HEAD
 
       {/* ── Ola ──
           Sin color de fondo en el contenedor: el hero se ve
@@ -191,6 +336,8 @@ export default function Hero({ hero }: Props) {
         </svg>
       </div>
 
+=======
+>>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
     </section>
   );
 }
