@@ -4,9 +4,8 @@ import HeaderReact   from "@/components/layout/Header";
 import Footer        from "@/components/layout/Footer.astro";
 import RadioPlayer   from "@/components/layout/RadioPlayer.astro";
 import WaveDivider   from "@/components/layout/WaveDivider.astro";
-import HeroReact        from "@/components/sections/Hero";
-import SceneTransition  from "@/components/sections/SceneTransition";
-import About            from "@/components/sections/About";
+import HeroReact     from "@/components/sections/Hero";
+import About         from "@/components/sections/About";
 import Ministries    from "@/components/sections/Ministries";
 import Schedule      from "@/components/sections/Schedule";
 import Gallery       from "@/components/sections/Gallery";
@@ -26,7 +25,7 @@ const data = siteContent;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Anton&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -40,32 +39,15 @@ const data = siteContent;
     ></div>
 
     <div class="relative z-[2] overflow-x-hidden">
-      <!-- Header con React: scroll, mobile menu, scroll-to-top -->
       <HeaderReact brand={data.brand} links={data.navLinks} client:load />
 
       <main>
-        <!-- 1. Hero -->
         <HeroReact hero={data.hero} client:load />
-
-        <!-- Transición cinematográfica: tarjeta que encoge (efecto lenis.dev) -->
-        <SceneTransition client:load />
-
-        <!-- 2. Quiénes somos -->
         <About about={data.about} client:visible />
-
-        <!-- 3. Ministerios -->
         <Ministries ministries={data.ministries} client:visible />
-
-        <!-- 3. Agenda -->
         <Schedule events={data.events} client:visible />
-
-        <!-- white → stone-900 -->
         <WaveDivider fromBg="#ffffff" toFill="#0c0a09" flip />
-
-        <!-- 4. Galería -->
         <Gallery gallery={data.gallery} client:visible />
-
-        <!-- 5. Contacto -->
         <Contact contact={data.contact} client:visible />
       </main>
 
@@ -74,10 +56,8 @@ const data = siteContent;
 
     <RadioPlayer radio={data.radio} />
 
-    <!-- Partículas animadas en el fondo -->
     <script defer src="/scripts/faith-bg.js"></script>
 
-    <!-- Lenis smooth scroll + GSAP ScrollTrigger sync -->
     <script>
       import Lenis from "lenis";
       import { gsap } from "gsap";
@@ -93,16 +73,9 @@ const data = siteContent;
       });
 
       lenis.on("scroll", ScrollTrigger.update);
-<<<<<<< HEAD
       gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-=======
-
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-
->>>>>>> 3c283aa10f66add8e0cfbe38d9996c6f09e47202
       gsap.ticker.lagSmoothing(0);
     </script>
+
   </body>
 </html>

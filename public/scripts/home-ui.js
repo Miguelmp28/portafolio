@@ -323,22 +323,22 @@ window.addEventListener("resize", () => {
 window.addEventListener("scroll", syncScrollTopButton, { passive: true });
 syncScrollTopButton();
 
-// ── Header color sync with Hero ──────────────────────────────────────────────
+// ──  er color sync with Hero ──────────────────────────────────────────────
 (function () {
-  const header = document.getElementById("siteHeader");
+  const  er = document.getElementById("site er");
   const hero   = document.getElementById("inicio");
-  if (!header || !hero) return;
+  if (! er || !hero) return;
 
   // Switch to "scrolled" (white) once the Hero section's bottom edge
-  // passes behind the header bar.
-  function syncHeader() {
+  // passes behind the  er bar.
+  function sync er() {
     const heroBottom    = hero.getBoundingClientRect().bottom;
-    const headerBottom  = header.offsetHeight;
-    header.toggleAttribute("data-scrolled", heroBottom <= headerBottom);
+    const  erBottom  =  er.offsetHeight;
+     er.toggleAttribute("data-scrolled", heroBottom <=  erBottom);
   }
 
-  window.addEventListener("scroll", syncHeader, { passive: true });
-  syncHeader(); // run once on load
+  window.addEventListener("scroll", sync er, { passive: true });
+  sync er(); // run once on load
 })();
 
 // ── Scroll reveal ────────────────────────────────────────────────────────────

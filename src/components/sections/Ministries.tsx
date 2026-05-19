@@ -74,7 +74,7 @@ const CARD_COLORS = [
 
 export default function Ministries({ ministries }: Props) {
   const sectionRef     = useRef<HTMLElement>(null);
-  const headingRef     = useRef<HTMLDivElement>(null);
+  const  ingRef     = useRef<HTMLDivElement>(null);
   const perspectiveRef = useRef<HTMLDivElement>(null); // 3D perspective container
   const trackRef       = useRef<HTMLDivElement>(null);
   const viewRef        = useRef<HTMLDivElement>(null);
@@ -128,9 +128,9 @@ export default function Ministries({ ministries }: Props) {
     const section = sectionRef.current;
     const cards   = cardRefs.current.filter(Boolean);
 
-    /* ── Heading: from below + fade — not from side ── */
+    /* ──  ing: from below + fade — not from side ── */
     gsap.fromTo(
-      headingRef.current ? Array.from(headingRef.current.children) : [],
+       ingRef.current ? Array.from( ingRef.current.children) : [],
       { opacity: 0, y: 32 },
       {
         opacity: 1,
@@ -196,7 +196,7 @@ export default function Ministries({ ministries }: Props) {
     <section ref={sectionRef} id="ministerios" className="bg-white py-16 sm:py-20 overflow-hidden">
       <div className="mx-auto w-[min(1120px,92vw)]">
 
-        <div ref={headingRef}>
+        <div ref={ ingRef}>
           <h2 className="text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl">
             Ministerios activos
           </h2>

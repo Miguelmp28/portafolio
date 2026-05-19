@@ -36,7 +36,7 @@ const DAY_COLORS: Record<string, string> = {
 
 export default function Schedule({ events }: Props) {
   const sectionRef  = useRef<HTMLElement>(null);
-  const headingRef  = useRef<HTMLDivElement>(null);
+  const  ingRef  = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const trackRef    = useRef<HTMLDivElement>(null);
   const viewRef     = useRef<HTMLDivElement>(null);
@@ -105,11 +105,11 @@ export default function Schedule({ events }: Props) {
   useGSAP(() => {
     const section = sectionRef.current;
 
-    /* ── UNIQUE: heading slides in from the RIGHT — opposite of all other sections ──
+    /* ── UNIQUE:  ing slides in from the RIGHT — opposite of all other sections ──
        Creates immediate directional contrast. The user feels "this is different."
     ── */
     gsap.fromTo(
-      headingRef.current ? Array.from(headingRef.current.children) : [],
+       ingRef.current ? Array.from( ingRef.current.children) : [],
       { opacity: 0, x: 60 },
       {
         opacity: 1,
@@ -166,8 +166,8 @@ export default function Schedule({ events }: Props) {
     <section ref={sectionRef} id="agenda" className="bg-white py-16 sm:py-20 overflow-hidden">
       <div className="mx-auto w-[min(1120px,92vw)]">
 
-        {/* Heading: enters from the RIGHT (directionally unique) */}
-        <div ref={headingRef}>
+        {/*  ing: enters from the RIGHT (directionally unique) */}
+        <div ref={ ingRef}>
           <h2 className="text-2xl font-bold tracking-tight text-stone-900 sm:text-3xl">
             Agenda de la semana
           </h2>

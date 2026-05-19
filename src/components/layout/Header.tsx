@@ -74,7 +74,7 @@ function ScrollTopButton() {
   );
 }
 
-export default function Header({ brand, links }: Props) {
+export default function  er({ brand, links }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

@@ -58,7 +58,7 @@ function Lightbox({ image, onClose }: { image: GalleryItem; onClose: () => void 
 
 export default function Gallery({ gallery }: Props) {
   const sectionRef    = useRef<HTMLElement>(null);
-  const headerRef     = useRef<HTMLDivElement>(null);
+  const  erRef     = useRef<HTMLDivElement>(null);
   const featuredBoxRef = useRef<HTMLDivElement>(null);  // overflow:hidden container
   const featuredImgRef = useRef<HTMLImageElement>(null); // actual img (inner parallax)
   const thumbColRef   = useRef<HTMLDivElement>(null);
@@ -141,9 +141,9 @@ export default function Gallery({ gallery }: Props) {
   useGSAP(() => {
     const section = sectionRef.current;
 
-    /* ── Header: scale + fade from center (not directional slide) ── */
+    /* ──  er: scale + fade from center (not directional slide) ── */
     gsap.fromTo(
-      headerRef.current,
+       erRef.current,
       { opacity: 0, scale: 0.94, y: -20 },
       {
         opacity: 1,
@@ -264,8 +264,8 @@ export default function Gallery({ gallery }: Props) {
       <section ref={sectionRef} id="galeria" className="bg-stone-950 py-16 sm:py-20 overflow-hidden">
         <div className="mx-auto w-[min(1120px,92vw)]">
 
-          {/* Header */}
-          <div ref={headerRef} className="flex items-end justify-between">
+          {/*  er */}
+          <div ref={ erRef} className="flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
                 Galería de comunidad
